@@ -22,20 +22,9 @@ management.
   complete. Completing an offer automatically marks the blood request as fulfilled — one
   action updates both records in a single transaction.
 
-- **Donor Eligibility Check**: Enforces a 90-day cooldown between donations. The system
-  tracks each user's last donation date and blocks ineligible donors from accepting offers.
-
-- **Request Auto-Expiry**: Blood requests automatically expire based on urgency level —
-  CRITICAL in 24 hours, URGENT in 72 hours, and NORMAL in 7 days. A background scheduler
-  runs hourly, cancels expired requests, and cleans up all linked pending offers.
-
 - **Personal Stats Dashboard**: Every user can view their full activity summary — total
   donations, pending and accepted offers, total requests made, fulfilled and cancelled
   requests, current eligibility status, and next eligible donation date.
-
-- **Donor Search**: Search available donors by blood group, city, name, and account type.
-  Search results return limited public data only — phone and email are never exposed until
-  a donation offer is accepted.
 
 - **Role-Based Access Control (RBAC)**: Two-tier role system enforced at both the URL and
   method level:
@@ -53,8 +42,7 @@ management.
   donor, and already fulfilled requests.
 
 - **Database Flexibility**: Runs on H2 in-memory database by default — no setup needed.
-  Switch to MySQL or PostgreSQL by changing one property. Schema managed entirely by
-  Flyway migrations with seed data loaded on startup.
+  Switch to MySQL or PostgreSQL by changing one property.
 
 - **Swagger UI Documentation**: Interactive API documentation available at `/swagger-ui.html`.
   All endpoints documented with request bodies, response schemas, and status codes.
