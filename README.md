@@ -7,18 +7,61 @@ management.
 
 ## Key Features
 
-- **Donor/Seeker Registration & Matching**: User registration with blood group and location-based matching for optimal
-  donor-seeker connections
-- **JWT Authentication**: Secure token-based authentication with configurable expiry and refresh capabilities
-- **Role-Based Access Control (RBAC)**: Two-tier role system:
-    - **USER**: Can request blood, post donations, and manage offers
-    - **ADMIN**: Full platform oversight and user management capabilities
-- **Blood Request Management**: Create, track, and fulfill blood requests with urgency levels and status updates
-- **Donation Offer Management**: Users can offer blood donations with availability and compatibility tracking
-- **Centralized Error Handling**: Standardized API response format with custom exception handling
-- **Swagger UI Documentation**: Interactive API documentation accessible via `/docs`
-- **H2 Database Support**: In-memory database for development and testing with automatic schema initialization
+- **User Registration & Authentication**: Any user can register with their basic details,
+  blood group, and city. Secure JWT-based login with role-based token claims.
 
+- **Flexible Donor & Requester System**: No fixed roles — every registered user can request
+  blood when they need it and donate when they are available. A donor today can be a
+  patient tomorrow.
+
+- **Automatic Donor Matching**: When a blood request is created, the system automatically
+  finds all available users with the matching blood group in the same city and sends them
+  a donation offer — no manual search needed.
+
+- **Donation Offer Lifecycle**: Matched donors receive offers they can accept, decline, or
+  complete. Completing an offer automatically marks the blood request as fulfilled — one
+  action updates both records in a single transaction.
+
+- **Donor Eligibility Check**: Enforces a 90-day cooldown between donations. The system
+  tracks each user's last donation date and blocks ineligible donors from accepting offers.
+
+- **Request Auto-Expiry**: Blood requests automatically expire based on urgency level —
+  CRITICAL in 24 hours, URGENT in 72 hours, and NORMAL in 7 days. A background scheduler
+  runs hourly, cancels expired requests, and cleans up all linked pending offers.
+
+- **Personal Stats Dashboard**: Every user can view their full activity summary — total
+  donations, pending and accepted offers, total requests made, fulfilled and cancelled
+  requests, current eligibility status, and next eligible donation date.
+
+- **Donor Search**: Search available donors by blood group, city, name, and account type.
+  Search results return limited public data only — phone and email are never exposed until
+  a donation offer is accepted.
+
+- **Role-Based Access Control (RBAC)**: Two-tier role system enforced at both the URL and
+  method level:
+    - **USER**: Register, request blood, respond to offers, view personal stats and history
+    - **ADMIN**: Full platform oversight — manage users, monitor all requests and offers,
+      view platform-wide stats, force cancel requests, activate or deactivate accounts
+
+- **Blood Request Management**: Create requests with urgency levels (NORMAL, URGENT,
+  CRITICAL), track status in real time (OPEN, FULFILLED, CANCELLED), and view full
+  request history.
+
+- **Centralized Exception Handling**: All errors return a consistent JSON structure with
+  timestamp, status code, error type, and message. Custom exceptions cover all domain
+  scenarios — resource not found, unauthorized access, duplicate registration, ineligible
+  donor, and already fulfilled requests.
+
+- **Database Flexibility**: Runs on H2 in-memory database by default — no setup needed.
+  Switch to MySQL or PostgreSQL by changing one property. Schema managed entirely by
+  Flyway migrations with seed data loaded on startup.
+
+- **Swagger UI Documentation**: Interactive API documentation available at `/swagger-ui.html`.
+  All endpoints documented with request bodies, response schemas, and status codes.
+
+- **Docker Support**: Fully containerized with a single `docker-compose up` command. Starts
+  with H2 and pre-loaded dummy data out of the box. Real database credentials passed via
+  environment variables — nothing sensitive committed to the repository.
 ---
 
 ## Tech Stack
