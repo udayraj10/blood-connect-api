@@ -1,7 +1,6 @@
 # Blood Connect API
 
-A RESTful API connecting blood donors with seekers in real-time, enabling efficient blood donation matching and
-management.
+A real-time blood donation platform connecting donors with patients and hospitals in need.
 
 ---
 
