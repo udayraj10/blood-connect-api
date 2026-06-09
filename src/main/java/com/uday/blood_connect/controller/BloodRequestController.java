@@ -48,10 +48,11 @@ public class BloodRequestController {
     @GetMapping("/")
     public ResponseEntity<ApiResponse<Page<BloodRequestResponseDTO.Summary>>> getBloodRequests(
             @AuthenticationPrincipal UserDetails user,
-            Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(ApiResponse.success("Blood requests retrieved successfully",
-                bloodRequestService.getBloodRequests(user.getUsername(), pageable)));
+                bloodRequestService.getBloodRequests(user.getUsername(), page, size)));
     }
 
     @GetMapping("/{requestId}/donors")
@@ -59,10 +60,11 @@ public class BloodRequestController {
             @Parameter(description = "The unique ID of the system user", example = "18")
             @PathVariable("requestId") Long requestId,
             @AuthenticationPrincipal UserDetails user,
-            Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(ApiResponse.success("Matched donors retrieved successfully",
-                bloodRequestService.getDonorsForRequest(requestId, user.getUsername(), pageable)));
+                bloodRequestService.getDonorsForRequest(requestId, user.getUsername(), page, size)));
     }
 
     @PatchMapping("/{requestId}/cancel")

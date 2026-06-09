@@ -31,7 +31,7 @@ public class AdminController {
 
     @GetMapping("/users/{userId}")
     public ResponseEntity<ApiResponse<UserResponseDTO.Details>> getUserById(
-            @Parameter(description = "The unique ID of the system user", example = "11")
+            @Parameter(description = "The unique ID of the system user", example = "33")
             @PathVariable("userId") Long userId) {
 
         return ResponseEntity.ok(ApiResponse.success("User retrieved successfully",
@@ -40,7 +40,7 @@ public class AdminController {
 
     @PatchMapping("/users/{userId}/deactivate")
     public ResponseEntity<ApiResponse<Void>> deactivateUser(
-            @Parameter(description = "The unique ID of the system user", example = "11")
+            @Parameter(description = "The unique ID of the system user", example = "33")
             @PathVariable("userId") Long userId) {
         adminService.deactivateUser(userId);
 
@@ -49,7 +49,7 @@ public class AdminController {
 
     @PatchMapping("/users/{userId}/activate")
     public ResponseEntity<ApiResponse<Void>> activateUser(
-            @Parameter(description = "The unique ID of the system user", example = "11")
+            @Parameter(description = "The unique ID of the system user", example = "33")
             @PathVariable("userId") Long userId) {
 
         adminService.activeUser(userId);
@@ -58,7 +58,7 @@ public class AdminController {
 
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<ApiResponse<Void>> deleteUser(
-            @Parameter(description = "The unique ID of the system user", example = "11")
+            @Parameter(description = "The unique ID of the system user", example = "33")
             @PathVariable("userId") Long userId) {
 
         adminService.deleteUser(userId);
@@ -105,7 +105,7 @@ public class AdminController {
 
     @GetMapping("/offers/{offerId}")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> getOfferById(
-            @Parameter(description = "The unique ID of the system user", example = "19")
+            @Parameter(description = "The unique ID of the system user", example = "1")
             @PathVariable("offerId") Long offerId) {
 
         return ResponseEntity.ok(ApiResponse.success("Donation offer retrieved successfully",

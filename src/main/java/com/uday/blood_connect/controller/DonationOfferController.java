@@ -24,15 +24,16 @@ public class DonationOfferController {
     @GetMapping("/offers")
     public ResponseEntity<ApiResponse<Page<DonationOfferResponseDTO>>> getRequestOffers(
             @AuthenticationPrincipal UserDetails user,
-            Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(ApiResponse.success("Blood requests retrieved successfully",
-                donationOfferService.getRequestOffers(user.getUsername(), pageable)));
+                donationOfferService.getRequestOffers(user.getUsername(), page, size)));
     }
 
     @PatchMapping("/offers/{offerId}/accept")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> acceptOffer(
-            @Parameter(description = "The unique ID of the system user", example = "16")
+            @Parameter(description = "The unique ID of the system user", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
@@ -42,7 +43,7 @@ public class DonationOfferController {
 
     @PatchMapping("/offers/{offerId}/decline")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> declineOffer(
-            @Parameter(description = "The unique ID of the system user", example = "34")
+            @Parameter(description = "The unique ID of the system user", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
@@ -52,7 +53,7 @@ public class DonationOfferController {
 
     @PatchMapping("/offers/{offerId}/complete")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> completeOffer(
-            @Parameter(description = "The unique ID of the system user", example = "16")
+            @Parameter(description = "The unique ID of the system user", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
