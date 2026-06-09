@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,9 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
+
+    @Value("${jwt.secret}")
+    private String secretKey = System.getenv("JWT_SECRET");
 
     public String generateToken(String email, String role) {
         return Jwts.builder()
@@ -25,7 +29,6 @@ public class JwtUtil {
     }
 
     private SecretKey getKey() {
-        String secretKey = "GIuDHSlL7x26zvkI5IaRDDTi67d9JsxDMsWUep7Y+d8=";
 
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
