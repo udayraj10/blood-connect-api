@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS donation_offers (
     donor_id BIGINT NOT NULL,
     blood_request_id BIGINT,
     status VARCHAR(50) NOT NULL,
-    message VARCHAR(1000),
     offered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     responded_at TIMESTAMP,
     CONSTRAINT fk_donation_offers_donor FOREIGN KEY (donor_id) REFERENCES users(id) ON DELETE CASCADE,
