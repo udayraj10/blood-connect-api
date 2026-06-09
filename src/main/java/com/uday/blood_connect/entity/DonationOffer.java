@@ -41,10 +41,6 @@ public class DonationOffer {
     @Column(nullable = false)
     private OfferStatus status;
 
-    @Size(max = 500, message = "Message must not exceed 500 characters")
-    @Column(length = 500)
-    private String message;
-
     @NotNull(message = "Offered at timestamp is required")
     @Column(nullable = false, updatable = false)
     private LocalDateTime offeredAt;
