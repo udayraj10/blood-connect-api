@@ -1,4 +1,4 @@
-# Blood Connect API
+# BloodConnect API
 
 A real-time blood donation platform connecting donors with patients and hospitals in need.
 
@@ -41,38 +41,39 @@ A real-time blood donation platform connecting donors with patients and hospital
   donor, and already fulfilled requests.
 
 - **Database Flexibility**: Runs on H2 in-memory database by default — no setup needed.
-  Switch to MySQL or PostgreSQL by changing one property.
+  Switch to MySQL or PostgreSQL by changing one environment variable.
 
-- **Swagger UI Documentation**: Interactive API documentation available at `/swagger-ui.html`.
+- **Swagger UI Documentation**: Interactive API documentation available at `/docs`.
   All endpoints documented with request bodies, response schemas, and status codes.
 
 - **Docker Support**: Fully containerized with a single `docker-compose up` command. Starts
   with H2 and pre-loaded dummy data out of the box. Real database credentials passed via
   environment variables — nothing sensitive committed to the repository.
+
 ---
 
 ## Tech Stack
 
 ### Backend Framework
 
-- **Spring Boot 3.5.14**: Modern Java web framework
+- **Spring Boot 3.x**: Modern Java web framework
 - **Spring Security 6.x**: Authentication and authorization
 - **Spring Data JPA**: Object-relational mapping with Hibernate
 
 ### Database
 
-- **H2 Database**: In-memory database for development (can be swapped with PostgreSQL/MySQL for production)
+- **H2 Database**: In-memory database for development (default)
+- **MySQL / PostgreSQL**: Supported via profile switch for production
 
 ### API Documentation & Validation
 
-- **SpringDoc OpenAPI 2.8.5**: OpenAPI 3.0 documentation generator
-- **Swagger UI**: Interactive API documentation
+- **SpringDoc OpenAPI**: OpenAPI 3.0 documentation generator
+- **Swagger UI**: Interactive API documentation at `/docs`
 - **Jakarta Validation**: Bean validation with custom constraints
 
 ### Security
 
-- **JWT (JSON Web Tokens) 0.12.6**: JJWT library for token generation and validation
-- **JJWT API, Implementation & Jackson**: Complete JWT support stack
+- **JWT (JJWT 0.12.x)**: Token generation, validation, and role-based claims
 
 ### Development Tools
 
@@ -85,85 +86,136 @@ A real-time blood donation platform connecting donors with patients and hospital
 
 Before you begin, ensure you have the following installed:
 
-- **JDK 17** or higher ([Download](https://www.oracle.com/java/technologies/downloads/#java17))
+- **JDK 21** ([Download](https://www.oracle.com/java/technologies/downloads/#java21))
 - **Maven 3.6+** (comes with the project as `mvnw`)
-- **Git** (for cloning the repository)
+- **Git**
+- **Docker & Docker Compose** ([Download](https://www.docker.com/products/docker-desktop))
 - **Postman or cURL** (for testing API endpoints)
 
-### Optional
+### Optional (for real database)
 
-- **PostgreSQL 13+** or **MySQL 8.0+** (for production deployment)
+- **PostgreSQL 13+** or **MySQL 8.0+**
 
 ---
 
-## Quick Start / Installation
+## Environment Setup
 
-Follow these steps to set up and run the application locally:
+The application reads secrets and configuration from environment variables.
+**Never hardcode credentials in property files.**
 
-### 1. Clone the Repository
+### Step 1 — Create your .env file
 
-```bash
-git clone https://github.com/yourusername/blood-connect.git
-cd blood-connect
-```
-
-### 2. Configure the Database (Optional)
-
-By default, the application uses an in-memory H2 database. To use PostgreSQL or MySQL,
-update `src/main/resources/application.properties`:
-
-```properties
-# For PostgreSQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/blood_connect
-spring.datasource.username=postgres
-spring.datasource.password=yourpassword
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQL10Dialect
-# For MySQL
-spring.datasource.url=jdbc:mysql://localhost:3306/blood_connect
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-```
-
-### 3. Build the Application
+Copy the provided template:
 
 ```bash
-./mvnw clean package
+cp .env.example .env
 ```
 
-### 4. Run the Application
+### Step 2 — Fill in your .env file
 
 ```bash
+# ==========================================
+# REQUIRED — set these before running
+# ==========================================
+
+# Active profile: h2 | mysql | postgres
+SPRING_PROFILES_ACTIVE=h2
+
+# JWT secret key — use a long random string in production
+JWT_SECRET=your-secret-key-here-make-it-long-and-random
+```
+
+### Option A - Clone the repository
+
+```bash
+git clone [https://github.com/yourusername/bloodconnect.git](https://github.com/yourusername/bloodconnect.git)
+cd bloodconnect
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your JWT_SECRET
+
+# Start the application
+docker-compose up
+```
+
+The application starts at `http://localhost:8080` with H2 database
+and pre-loaded dummy data.
+
+To run in the background:
+
+```bash
+docker-compose up -d
+```
+
+To stop:
+
+```bash
+docker-compose down
+```
+
+---
+
+### Option B - Run Locally with Maven
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/bloodconnect.git
+cd bloodconnect
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your JWT_SECRET
+
+# Build the project
+./mvnw clean package -DskipTests
+
+# Run the application
 ./mvnw spring-boot:run
 ```
 
-The application will start on `http://localhost:8080`
+---
+
+## Database Profiles
+
+The application supports three database profiles.
+Switch between them by changing `SPRING_PROFILES_ACTIVE` in your `.env` file.
+
+| Profile    | Database       | Use Case                          |
+|------------|----------------|-----------------------------------|
+| `h2`       | H2 In-Memory   | Default — development and testing |
+| `mysql`    | MySQL 8+       | Production with MySQL             |
+| `postgres` | PostgreSQL 13+ | Production with PostgreSQL        |
+
+### H2 (Default)
+
+```bash
+SPRING_PROFILES_ACTIVE=h2
+```
+
+No additional setup needed. Schema and dummy data load automatically on startup.
 
 ---
 
 ## API Documentation
 
-### Swagger UI
-
 Once the application is running, access the interactive API documentation at:
 
 **[http://localhost:8080/docs](http://localhost:8080/docs)**
 
-### OpenAPI JSON Definition
-
-The raw OpenAPI specification is available at:
+Raw OpenAPI JSON:
 
 **[http://localhost:8080/api-json](http://localhost:8080/api-json)**
 
-### H2 Database Console (Development Only)
-
-Access the embedded H2 database console at:
+### H2 Console (H2 profile only)
 
 **[http://localhost:8080/h2-console](http://localhost:8080/h2-console)**
 
-- JDBC URL: `jdbc:h2:mem:testdb`
-- User: `sa`
-- Password: (leave blank)
+```
+JDBC URL  : jdbc:h2:mem:bloodconnect
+Username  : sa
+Password  : (leave blank)
+```
 
 ---
 
@@ -171,155 +223,149 @@ Access the embedded H2 database console at:
 
 ### Authentication (Public)
 
-| Method | Endpoint             | Description                         |
-|--------|----------------------|-------------------------------------|
-| POST   | `/api/auth/register` | Register a new user (User role)     |
-| POST   | `/api/auth/login`    | Authenticate and retrieve JWT token |
+| Method | Endpoint             | Description                 |
+|--------|----------------------|-----------------------------|
+| POST   | `/api/auth/register` | Register a new user         |
+| POST   | `/api/auth/login`    | Login and receive JWT token |
 
-### Users (Protected - USER role)
+### Users (USER role)
 
-| Method | Endpoint                     | Description                             |
-|--------|------------------------------|-----------------------------------------|
-| GET    | `/api/users/me`              | Get current user profile details        |
-| PATCH  | `/api/users/me`              | Update current user profile information |
-| PATCH  | `/api/users/me/availability` | Update user blood donation availability |
-| PATCH  | `/api/users/me/password`     | Change user password                    |
-| PATCH  | `/api/users/me/deactivate`   | Deactivate current user account         |
-| GET    | `/api/users/me/stats`        | Get current user statistics             |
+| Method | Endpoint                     | Description                  |
+|--------|------------------------------|------------------------------|
+| GET    | `/api/users/me`              | Get own profile              |
+| PATCH  | `/api/users/me`              | Update profile               |
+| PATCH  | `/api/users/me/availability` | Toggle donation availability |
+| PATCH  | `/api/users/me/password`     | Change password              |
+| PATCH  | `/api/users/me/deactivate`   | Deactivate account           |
+| GET    | `/api/users/me/stats`        | Get personal stats           |
+| GET    | `/api/users/search`          | Search donors                |
 
-### Blood Requests (Protected - USER role)
+### Blood Requests (USER role)
 
-| Method | Endpoint                                 | Description                                        |
-|--------|------------------------------------------|----------------------------------------------------|
-| POST   | `/api/blood-requests/`                   | Create a new blood request                         |
-| GET    | `/api/blood-requests/`                   | Get all blood requests (paginated)                 |
-| GET    | `/api/blood-requests/{requestId}`        | Get specific blood request details                 |
-| GET    | `/api/blood-requests/{requestId}/donors` | Get matched donors for a blood request (paginated) |
-| PATCH  | `/api/blood-requests/{requestId}/cancel` | Cancel a blood request                             |
+| Method | Endpoint                                 | Description                  |
+|--------|------------------------------------------|------------------------------|
+| POST   | `/api/blood-requests`                    | Create a blood request       |
+| GET    | `/api/blood-requests`                    | Get own requests (paginated) |
+| GET    | `/api/blood-requests/{requestId}`        | Get request details          |
+| GET    | `/api/blood-requests/{requestId}/donors` | Get matched donors           |
+| PATCH  | `/api/blood-requests/{requestId}/cancel` | Cancel a request             |
 
-### Donation Offers (Protected - USER role)
+### Donation Offers (USER role)
 
-| Method | Endpoint                                   | Description                               |
-|--------|--------------------------------------------|-------------------------------------------|
-| GET    | `/api/donations/offers`                    | Get available donation offers (paginated) |
-| PATCH  | `/api/donations/offers/{offerId}/accept`   | Accept a donation offer                   |
-| PATCH  | `/api/donations/offers/{offerId}/decline`  | Decline a donation offer                  |
-| PATCH  | `/api/donations/offers/{offerId}/complete` | Complete a donation offer                 |
+| Method | Endpoint                                   | Description                |
+|--------|--------------------------------------------|----------------------------|
+| GET    | `/api/donations/offers`                    | Get own offers (paginated) |
+| PATCH  | `/api/donations/offers/{offerId}/accept`   | Accept an offer            |
+| PATCH  | `/api/donations/offers/{offerId}/decline`  | Decline an offer           |
+| PATCH  | `/api/donations/offers/{offerId}/complete` | Complete a donation        |
 
-### Admin (Protected - ADMIN role)
+### Admin (ADMIN role)
 
-| Method | Endpoint                                       | Description                             |
-|--------|------------------------------------------------|-----------------------------------------|
-| GET    | `/api/admin/users`                             | Get all users with pagination           |
-| GET    | `/api/admin/users/{userId}`                    | Get specific user details by ID         |
-| PATCH  | `/api/admin/users/{userId}/deactivate`         | Deactivate a user account               |
-| PATCH  | `/api/admin/users/{userId}/activate`           | Activate a deactivated user account     |
-| DELETE | `/api/admin/users/{userId}`                    | Permanently delete a user               |
-| GET    | `/api/admin/blood-requests`                    | Get all blood requests with pagination  |
-| GET    | `/api/admin/blood-requests/{requestId}`        | Get specific blood request details      |
-| PATCH  | `/api/admin/blood-requests/{requestId}/cancel` | Cancel any blood request                |
-| GET    | `/api/admin/offers`                            | Get all donation offers with pagination |
-| GET    | `/api/admin/offers/{offerId}`                  | Get specific donation offer details     |
-| GET    | `/api/admin/stats`                             | Get platform statistics and analytics   |
+| Method | Endpoint                                       | Description                  |
+|--------|------------------------------------------------|------------------------------|
+| GET    | `/api/admin/users`                             | Get all users (paginated)    |
+| GET    | `/api/admin/users/{userId}`                    | Get user by ID               |
+| PATCH  | `/api/admin/users/{userId}/deactivate`         | Deactivate a user            |
+| PATCH  | `/api/admin/users/{userId}/activate`           | Activate a user              |
+| DELETE | `/api/admin/users/{userId}`                    | Delete a user                |
+| GET    | `/api/admin/blood-requests`                    | Get all requests (paginated) |
+| GET    | `/api/admin/blood-requests/{requestId}`        | Get request by ID            |
+| PATCH  | `/api/admin/blood-requests/{requestId}/cancel` | Force cancel a request       |
+| GET    | `/api/admin/offers`                            | Get all offers (paginated)   |
+| GET    | `/api/admin/offers/{offerId}`                  | Get offer by ID              |
+| GET    | `/api/admin/stats`                             | Get platform statistics      |
 
 ---
 
 ## Authentication & Authorization
 
-### JWT Token Structure
-
-Tokens are valid for **24 hours** from generation and include user information and role for authorization checks.
-
-### Role-Based Access Control (RBAC)
-
-The platform implements two-tier role-based access control:
-
-- **USER**:
-    - Can register as a blood donor or seeker
-    - Can create blood requests and post donation availability
-    - Can search for matched donors/recipients
-    - Can accept, decline, and complete donation offers
-    - Can manage own profile and view personal statistics
-    - Can change password and deactivate account
-
-- **ADMIN**:
-    - Full access to all user management operations
-    - Can view, activate, or deactivate any user account
-    - Can delete user accounts permanently
-    - Can manage and cancel any blood requests
-    - Can view and manage donation offers platform-wide
-    - Can access platform statistics and analytics
-    - Can monitor all system activities
-
-### Including JWT in Requests
-
-All protected endpoints require the JWT token in the `Authorization` header:
+All protected endpoints require a JWT token in the `Authorization` header:
 
 ```bash
-curl -H "Authorization: Bearer YOUR_JWT_TOKEN" http://localhost:8080/api/users/me
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+Tokens are valid for **24 hours**. Generate a new one via `/api/auth/login`.
+
+### Role Permissions
+
+| Action                     | USER | ADMIN |
+|----------------------------|------|-------|
+| Register and login         | ✅    | ✅     |
+| Create blood request       | ✅    | ✅     |
+| Respond to offers          | ✅    | ✅     |
+| View own profile and stats | ✅    | ✅     |
+| View all users             | ❌    | ✅     |
+| Manage any request         | ❌    | ✅     |
+| View platform stats        | ❌    | ✅     |
+| Delete users               | ❌    | ✅     |
+
+---
+
+## Default Admin Account
+
+A default admin account is pre-loaded with the dummy data on startup:
+
+```
+Email    : admin1@bloodconnect.com
+Password : 000000
+```
+
+---
+
+## Code Structure
+
+```
+src/main/java/com/yourname/bloodconnect/
+├── controller/       REST API endpoints
+├── service/          Business logic
+├── repository/       Database access
+├── domain/           JPA entities
+├── dto/
+│   ├── request/      Incoming payloads
+│   └── response/     Outgoing responses
+├── enums/            Application enumerations
+├── exception/        Custom exceptions and global handler
+├── security/         JWT filter, service, and security config
+└── config/           Swagger and audit configuration
+
+src/main/resources/
+├── schema.sql                     Table creation
+├── import.sql                     Dummy seed data
+├── application.properties         Common config and active profile
+├── application-h2.properties      H2 specific config
+├── application-mysql.properties   MySQL specific config
+└── application-postgres.properties PostgreSQL specific config
 ```
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
-
-**Issue:** Application fails to start
-
-- **Solution:** Ensure JDK 17+ is installed. Run `java -version` to verify.
-
-**Issue:** Port 8080 is already in use
-
-- **Solution:** Change the port in `application.properties`:
-  ```properties
-  server.port=8081
-  ```
-
-**Issue:** Database connection errors
-
-- **Solution:** Verify database credentials in `application.properties` and ensure the database server is running.
-
-**Issue:** JWT token expired
-
-- **Solution:** Generate a new token by logging in again with `/api/auth/login`.
-
----
-
-## Development Guidelines
-
-### Code Structure
-
-- `/controller` - REST API endpoints
-- `/service` - Business logic layer
-- `/repository` - Database access layer
-- `/entity` - JPA entities
-- `/dto` - Data Transfer Objects (requests/responses)
-- `/security` - JWT and authentication logic
-- `/exception` - Custom exception handling
-- `/enums` - Application enumerations
-- `/config` - Spring configuration beans
-
-### Database Schema
-
-The application uses SQL scripts to initialize the database:
-
-- `schema.sql` - Table creation and structure
-- `import.sql` - Sample data for testing
+| Issue                    | Solution                                                    |
+|--------------------------|-------------------------------------------------------------|
+| App fails to start       | Ensure JDK 21 is installed — run `java -version`            |
+| Port 8080 in use         | Add `server.port=8081` to `application.properties`          |
+| JWT error on requests    | Token expired — login again at `/api/auth/login`            |
+| H2 console not loading   | Confirm `SPRING_PROFILES_ACTIVE=h2` in your `.env`          |
+| Docker build fails       | Ensure Docker Desktop is running before `docker-compose up` |
+| Real DB connection error | Verify DB is running and credentials in `.env` are correct  |
 
 ---
 
 ## Changelog
 
-### Version 0.0.1 (Initial Release)
+### Version 0.0.1
 
-- User registration and authentication
-- Blood request creation and management
-- Donation offer management
-- Donor search and matching
-- Admin dashboard and statistics
-- JWT-based security
+- User registration and JWT authentication
+- Automatic donor matching by blood group and city
+- Donation offer system with accept, decline, and complete flow
+- Personal stats dashboard
+- Admin panel with user and platform management
+- Role-based access control (USER and ADMIN)
+- Multi-database support via Spring profiles
+- Docker and docker-compose support
 
 ---
 
-**Happy Coding! 🩸❤️**
+**Happy Coding! 🩸**
