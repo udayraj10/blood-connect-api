@@ -8,11 +8,11 @@ import java.time.LocalDate;
 
 public record UpdateUserDTO(
 
-        @Schema(description = "Updated full name of the user", example = "John Doe")
+        @Schema(description = "Updated full name of the user", example = "Gaurav Taneja")
         @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
         String fullName,
 
-        @Schema(description = "Updated email address", example = "john@example.com")
+        @Schema(description = "Updated email address", example = "gaurav.t@gmail.com")
         @Email(message = "Email should be valid")
         String email,
 
@@ -27,7 +27,7 @@ public record UpdateUserDTO(
         @Schema(description = "Updated blood group", example = "O+")
         BloodGroup bloodGroup,
 
-        @Schema(description = "Updated city", example = "New York")
+        @Schema(description = "Updated city", example = "Mumbai")
         @Size(max = 100, message = "City must be at most 100 characters")
         String city,
 

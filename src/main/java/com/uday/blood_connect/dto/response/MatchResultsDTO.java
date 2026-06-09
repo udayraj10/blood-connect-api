@@ -11,16 +11,16 @@ public record MatchResultsDTO(
         @Schema(description = "Unique identifier of the match result", example = "1")
         Long id,
 
-        @Schema(description = "Full name of the matched donor", example = "Jane Smith")
+        @Schema(description = "Full name of the matched donor", example = "Aarav Sharma")
         String fullName,
 
-        @Schema(description = "City of the matched donor", example = "New York")
+        @Schema(description = "City of the matched donor", example = "Mumbai")
         String city,
 
         @Schema(description = "Blood group of the matched donor", example = "O+")
         BloodGroup bloodGroup,
 
-        @Schema(description = "Status of the donation offer", example = "ACCEPTED")
+        @Schema(description = "Status of the donation offer", example = "PENDING")
         OfferStatus offerStatus,
 
         @Schema(description = "Timestamp when the offer was made", example = "2025-06-06T10:30:00")

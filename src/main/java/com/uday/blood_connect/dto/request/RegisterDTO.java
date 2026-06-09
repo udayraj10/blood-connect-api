@@ -16,17 +16,17 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class RegisterDTO {
 
-    @Schema(description = "Full name of the user", example = "John Doe")
+    @Schema(description = "Full name of the user", example = "Aarav Sharma")
     @NotBlank(message = "Full name is required")
     @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
     private String fullName;
 
-    @Schema(description = "Email address of the user", example = "john@example.com")
+    @Schema(description = "Email address of the user", example = "aarav.sharma@gmail.com")
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
     private String email;
 
-    @Schema(description = "Password for user account", example = "John@545")
+    @Schema(description = "Password for user account", example = "Aarav@450")
     @NotBlank(message = "Password is required")
     @Size(min = 6, max = 255, message = "Password must be between 6 and 255 characters")
     private String password;
@@ -45,7 +45,7 @@ public class RegisterDTO {
     @NotNull(message = "Blood group is required")
     private BloodGroup bloodGroup;
 
-    @Schema(description = "City where the user is located", example = "New York")
+    @Schema(description = "City where the user is located", example = "Chennai")
     @NotBlank(message = "City is required")
     @Size(min = 2, max = 100, message = "City must be between 2 and 100 characters")
     private String city;

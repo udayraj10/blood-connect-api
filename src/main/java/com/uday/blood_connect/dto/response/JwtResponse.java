@@ -8,7 +8,7 @@ public record JwtResponse(
         @Schema(description = "Status of the authentication operation", example = "success")
         String status,
 
-        @Schema(description = "Message describing the authentication result", example = "Authentication successful")
+        @Schema(description = "Message describing the authentication result", example = "Authentication successfully")
         String message,
 
         @Schema(description = "JWT token for authenticated requests", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")

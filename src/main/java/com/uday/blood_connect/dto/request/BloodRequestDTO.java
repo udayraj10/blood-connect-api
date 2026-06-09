@@ -13,7 +13,7 @@ public record BloodRequestDTO(
         @NotNull(message = "Blood group is required")
         BloodGroup bloodGroup,
 
-        @Schema(description = "City where blood is needed", example = "New York")
+        @Schema(description = "City where blood is needed", example = "Bengaluru")
         @NotBlank(message = "City cannot be blank")
         @Size(min = 2, max = 100, message = "City must be between 2 and 100 characters")
         String city,
