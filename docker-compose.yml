@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  bloodconnect:
+    build: src/main/java
+    container_name: bloodconnect-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
