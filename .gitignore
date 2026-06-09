@@ -1,5 +1,10 @@
+# Environment
+.env
+
 HELP.md
 target/
+*./jar
+*.class
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -15,9 +20,10 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
-*.iws
+*.iwsx
 *.iml
 *.ipr
+.vscode/
 
 ### NetBeans ###
 /nbproject/private/
@@ -29,5 +35,4 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+
