@@ -44,7 +44,6 @@ public class MatchingService {
                         .donor(user)
                         .bloodRequest(bloodRequest)
                         .status(OfferStatus.PENDING)
-                        .message(bloodRequest.getMessage())
                         .build())
                 .toList();
 

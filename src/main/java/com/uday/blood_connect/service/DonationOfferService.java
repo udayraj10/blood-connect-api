@@ -7,7 +7,9 @@ import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,9 @@ public class DonationOfferService {
     private final DonationOfferRepository donationOfferRepository;
     private final UserService userService;
 
-    public Page<DonationOfferResponseDTO> getRequestOffers(String username, Pageable pageable) {
+    public Page<DonationOfferResponseDTO> getRequestOffers(String username, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+
         User user = userService.getUserByEmail(username);
 
         Page<DonationOffer> requests = donationOfferRepository.findByDonor(user, pageable);
@@ -82,7 +86,7 @@ public class DonationOfferService {
                 offer.getBloodRequest().getCity(),
                 offer.getBloodRequest().getUrgencyLevel(),
                 offer.getBloodRequest().getMessage(),
-                offer.getStatus().name(),
+                offer.getStatus(),
                 offer.getOfferedAt().toString(),
                 offer.getRespondedAt() != null ? offer.getRespondedAt().toString() : null
         );

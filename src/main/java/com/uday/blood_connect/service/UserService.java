@@ -134,10 +134,15 @@ public class UserService {
         return new UserResponseDTO.Summary(
                 user.getId(),
                 user.getFullName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAge(),
                 user.getBloodGroup(),
                 user.getCity(),
+                user.getAddress(),
+                user.getAccountType(),
                 user.getIsAvailable(),
-                user.getAccountType()
+                user.getLastDonationDate()
         );
     }
 }

@@ -12,7 +12,9 @@ import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +59,8 @@ public class BloodRequestService {
         return mapToDTO(bloodRequest);
     }
 
-    public Page<MatchResultsDTO> getDonorsForRequest(Long requestId, String username, Pageable pageable) {
+    public Page<MatchResultsDTO> getDonorsForRequest(Long requestId, String username, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         User user = userService.getUserByEmail(username);
 
@@ -82,7 +85,8 @@ public class BloodRequestService {
         ));
     }
 
-    public Page<BloodRequestResponseDTO.Summary> getBloodRequests(String username, Pageable pageable) {
+    public Page<BloodRequestResponseDTO.Summary> getBloodRequests(String username, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         User user = userService.getUserByEmail(username);
 
