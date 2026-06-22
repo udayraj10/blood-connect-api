@@ -2,10 +2,18 @@
 -- 1. INSERT USERS (50 Entries)
 -- ============================================================================
 
-INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('Admin One', 'admin1@bloodlink.in', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 32, '9876543210', 'O_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
-INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('Admin Two', 'admin2@bloodlink.in', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 29, '9876543211', 'A_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
-INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('Admin Three', 'admin3@bloodlink.in', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 35, '9876543212', 'B_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
-INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('Admin Four', 'admin4@bloodlink.in', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 41, '9876543213', 'AB_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
+INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available,
+ last_donation_date, is_active, created_at) VALUES ('Admin One', 'admin1@bloodconnect.com',
+ '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 32, '9876543210', 'O_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
+INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available,
+ last_donation_date, is_active, created_at) VALUES ('Admin Two', 'admin2@bloodconnect.com',
+ '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 29, '9876543211', 'A_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
+INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available,
+ last_donation_date, is_active, created_at) VALUES ('Admin Three', 'admin3@bloodconnect.com',
+ '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 35, '9876543212', 'B_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
+INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available,
+ last_donation_date, is_active, created_at) VALUES ('Admin Four', 'admin4@bloodconnect.com',
+ '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 41, '9876543213', 'AB_POS', 'Mumbai', 'Admin HQ, Andheri West', 'INDIVIDUAL', 'ADMIN', false, NULL, true, CURRENT_TIMESTAMP);
 
 INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('Red Cross Blood Trust', 'contact@redcrossmumbai.org', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 10, '2228471920', 'O_NEG', 'Mumbai', 'Red Cross Building, Colaba', 'ORGANIZATION', 'USER', false, NULL, true, CURRENT_TIMESTAMP);
 INSERT INTO users (full_name, email, password, age, phone, blood_group, city, address, account_type, role, is_available, last_donation_date, is_active, created_at) VALUES ('City Care Hospital', 'info@citycareblood.org', '$2a$10$bk3c37zG7QsR8pqzCNL2eO2DSimQ8/Gvo2vKoI3vwptq.EAF3Lxn.', 15, '4428941022', 'A_NEG', 'Chennai', '12, Greams Road', 'ORGANIZATION', 'USER', false, NULL, true, CURRENT_TIMESTAMP);
