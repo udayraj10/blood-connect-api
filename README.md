@@ -128,7 +128,7 @@ JWT_SECRET=your-secret-key-here-make-it-long-and-random
 ### Option A - Clone the repository
 
 ```bash
-git clone [https://github.com/yourusername/bloodconnect.git](https://github.com/yourusername/bloodconnect.git)
+git clone https://github.com/udayraj10/blood-connect-api.git
 cd bloodconnect
 
 # Set up environment
@@ -160,7 +160,7 @@ docker-compose down
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/bloodconnect.git
+git clone https://github.com/udayraj10/blood-connect-api.git
 cd bloodconnect
 
 # Set up environment
