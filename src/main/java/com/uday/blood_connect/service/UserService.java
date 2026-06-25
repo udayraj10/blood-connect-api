@@ -125,9 +125,13 @@ public class UserService {
     public Page<UserResponseDTO.Summary> searchByUsername(String email, String username, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
-        getUserByEmail(email);
+        User user = getUserByEmail(email);
 
-        Page<User> users = userRepository.findByFullNameContainingIgnoreCase(username, pageable);
+        Page<User> users = userRepository.searchByUserFullName(username, user.getId(), pageable);
+
+        if (users.isEmpty()) {
+            throw new ResourceNotFoundException("No user available with name");
+        }
 
         return users.map(this::mapToDTO);
     }
