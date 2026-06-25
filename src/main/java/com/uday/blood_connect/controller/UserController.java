@@ -9,6 +9,7 @@ import com.uday.blood_connect.dto.request.UpdateUserDTO;
 import com.uday.blood_connect.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,5 +67,16 @@ public class UserController {
 
         return ResponseEntity.ok(ApiResponse.success("User stats retrieved successfully",
                 userService.userStats(userDetails.getUsername())));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<Page<UserResponseDTO.Summary>>> searchByUserName(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam("name") String searchUserName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(ApiResponse.success("Users fetched successfully",
+                userService.searchByUsername(userDetails.getUsername(), searchUserName, page, size)));
     }
 }
