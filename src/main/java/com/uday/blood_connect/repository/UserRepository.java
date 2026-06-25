@@ -2,9 +2,12 @@ package com.uday.blood_connect.repository;
 
 import com.uday.blood_connect.entity.User;
 import com.uday.blood_connect.enums.BloodGroup;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +17,15 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :fullName, '%')) " +
+            "AND u.role = 'USER' " +
+            "AND u.id != :currentUserId")
+    Page<User> searchByUserFullName(
+            @Param("fullName") String fullName,
+            @Param("currentUserId") Long currentUserId,
+            Pageable pageable
+    );
 
     List<User> findByBloodGroup(BloodGroup bloodGroup);
 
