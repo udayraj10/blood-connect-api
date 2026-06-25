@@ -14,6 +14,9 @@ import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import com.uday.blood_connect.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +120,16 @@ public class UserService {
                 bloodRequestRepository.countByRequesterIdAndStatus(user.getId(), RequestStatus.FULFILLED),
                 bloodRequestRepository.countByRequesterIdAndStatus(user.getId(), RequestStatus.CANCELLED)
         );
+    }
+
+    public Page<UserResponseDTO.Summary> searchByUsername(String email, String username, int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+
+        getUserByEmail(email);
+
+        Page<User> users = userRepository.findByFullNameContainingIgnoreCase(username, pageable);
+
+        return users.map(this::mapToDTO);
     }
 
     public User getUserById(Long id) {
