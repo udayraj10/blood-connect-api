@@ -8,7 +8,6 @@ public class BloodConnectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BloodConnectApplication.class, args);
-		System.out.println("BloodConnectApplication.main");
 	}
 
 }
