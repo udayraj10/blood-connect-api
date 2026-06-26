@@ -139,11 +139,11 @@ The application requires the following environment variables:
 
 ## Troubleshooting
 
-| Issue                     | Solution                                        |
-| ------------------------- | ----------------------------------------------- |
-| Docker build fails        | Ensure Docker Desktop is running                |
-| Database connection fails | Verify your Neon database credentials in `.env` |
-| JWT authentication fails  | Verify `JWT_SECRET` is configured correctly     |
+| Issue                     | Solution                                       |
+| ------------------------- | ---------------------------------------------- |
+| Docker build fails        | Ensure Docker Desktop is running               |
+| Database connection fails | Verify your database credentials in `.env` |
+| JWT authentication fails  | Verify `JWT_SECRET` is configured correctly    |
 | Port 8080 already in use  | Change the exposed port in `docker-compose.yml` |
 
 ---
