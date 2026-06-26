@@ -42,7 +42,7 @@ public class BloodRequest {
 
     @NotBlank(message = "City is required")
     @Size(max = 100, message = "City must not exceed 100 characters")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String city;
 
     @NotNull(message = "Urgency level is required")
@@ -56,7 +56,7 @@ public class BloodRequest {
     private RequestStatus status;
 
     @Size(max = 500, message = "Message must not exceed 500 characters")
-    @Column(length = 500)
+    @Column(nullable = true)
     private String message;
 
     @OneToMany(mappedBy = "bloodRequest", cascade = CascadeType.ALL, orphanRemoval = true)
