@@ -30,17 +30,17 @@ public class User {
 
     @NotBlank(message = "Full name is required")
     @Size(min = 2, max = 100, message = "Full name must be between 2 and 100 characters")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String fullName;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    @Column(nullable = false, length = 255, unique = true)
+    @Column(nullable = false)
     private String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String password;
 
     @NotNull(message = "Age is required")
@@ -50,7 +50,7 @@ public class User {
 
     @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^[0-9]{10,20}$", message = "Phone number must be between 10 and 20 digits")
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String phone;
 
     @NotNull(message = "Blood group is required")
@@ -60,12 +60,12 @@ public class User {
 
     @NotBlank(message = "City is required")
     @Size(max = 100, message = "City must not exceed 100 characters")
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false)
     private String city;
 
     @NotBlank(message = "Address is required")
     @Size(max = 255, message = "Address must not exceed 255 characters")
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String address;
 
     @NotNull(message = "Account type is required")
