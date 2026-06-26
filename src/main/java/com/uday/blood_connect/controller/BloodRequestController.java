@@ -38,8 +38,8 @@ public class BloodRequestController {
     @GetMapping("/{requestId}")
     public ResponseEntity<ApiResponse<BloodRequestResponseDTO.Summary>> getBloodRequest(
             @Parameter(description = "The unique ID of the system user", example = "18")
-            @AuthenticationPrincipal UserDetails user,
-            @PathVariable("requestId") Long requestId) {
+            @PathVariable("requestId") Long requestId,
+            @AuthenticationPrincipal UserDetails user) {
 
         return ResponseEntity.ok(ApiResponse.success("Blood request retrieved successfully",
                 bloodRequestService.getBloodRequest(requestId, user.getUsername())));
