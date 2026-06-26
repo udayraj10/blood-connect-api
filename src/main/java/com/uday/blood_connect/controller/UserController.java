@@ -7,6 +7,7 @@ import com.uday.blood_connect.dto.request.AvailabilityDTO;
 import com.uday.blood_connect.dto.request.PasswordDTO;
 import com.uday.blood_connect.dto.request.UpdateUserDTO;
 import com.uday.blood_connect.service.UserService;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -71,8 +72,9 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<Page<UserResponseDTO.Summary>>> searchByUserName(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @Parameter(description = "Search for registered users by their full name", example = "meera")
             @RequestParam("name") String searchUserName,
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
