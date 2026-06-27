@@ -2,6 +2,11 @@
 
 A real-time blood donation platform built with Spring Boot that connects blood donors with patients through automatic donor matching. The application streamlines the blood donation process by notifying eligible donors when a compatible blood request is created, reducing the time required to find available donors.
 
+## Live Demo
+
+- **API base URL:** https://blood-connect-api-dvlk.onrender.com
+- **Swagger UI:** https://blood-connect-api-dvlk.onrender.com/docs
+
 ---
 
 # Key Features
