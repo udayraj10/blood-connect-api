@@ -16,7 +16,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey = System.getenv("JWT_SECRET");
+    private String secretKey;
 
     public String generateToken(String email, String role) {
         return Jwts.builder()
