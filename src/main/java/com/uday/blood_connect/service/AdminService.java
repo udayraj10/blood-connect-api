@@ -33,7 +33,7 @@ public class AdminService {
     private final BloodRequestService bloodRequestService;
     private final DonationOfferService donationOfferService;
 
-    public Page<UserResponseDTO.Details> getAllUsers(int page, int size) {
+    public Page<UserResponseDTO> getAllUsers(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         Page<User> users = userRepository.findAll(pageable);
@@ -41,7 +41,7 @@ public class AdminService {
         return users.map(this::mapToDTO);
     }
 
-    public UserResponseDTO.Details getUserById(Long userId) {
+    public UserResponseDTO getUserById(Long userId) {
         User user = userService.getUserById(userId);
 
         return mapToDTO(user);
@@ -132,11 +132,12 @@ public class AdminService {
         );
     }
 
-    private UserResponseDTO.Details mapToDTO(User user) {
-        return new UserResponseDTO.Details(
+    private UserResponseDTO mapToDTO(User user) {
+        return new UserResponseDTO(
                 user.getId(),
                 user.getFullName(),
                 user.getEmail(),
+                user.getRole(),
                 user.getPhone(),
                 user.getAge(),
                 user.getBloodGroup(),

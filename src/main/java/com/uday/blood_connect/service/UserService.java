@@ -2,7 +2,6 @@ package com.uday.blood_connect.service;
 
 import com.uday.blood_connect.dto.response.UserResponseDTO;
 import com.uday.blood_connect.dto.response.UserStatsDTO;
-import com.uday.blood_connect.dto.request.AvailabilityDTO;
 import com.uday.blood_connect.dto.request.PasswordDTO;
 import com.uday.blood_connect.dto.request.UpdateUserDTO;
 import com.uday.blood_connect.entity.User;
@@ -30,14 +29,14 @@ public class UserService {
     private final DonationOfferRepository donationOfferRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserResponseDTO.Summary getUserDetails(String email) {
+    public UserResponseDTO getUserDetails(String email) {
         User user = getUserByEmail(email);
 
         return mapToDTO(user);
     }
 
     @Transactional
-    public UserResponseDTO.Summary updateUserDetails(String email, UpdateUserDTO updateUserDTO) {
+    public UserResponseDTO updateUserDetails(String email, UpdateUserDTO updateUserDTO) {
         User user = getUserByEmail(email);
 
         if (updateUserDTO.fullName() != null) {
@@ -49,8 +48,8 @@ public class UserService {
             }
             user.setEmail(updateUserDTO.email());
         }
-        if (updateUserDTO.phoneNumber() != null) {
-            user.setPhone(updateUserDTO.phoneNumber());
+        if (updateUserDTO.phone() != null) {
+            user.setPhone(updateUserDTO.phone());
         }
         if (updateUserDTO.age() != null) {
             user.setAge(updateUserDTO.age());
@@ -64,19 +63,13 @@ public class UserService {
         if (updateUserDTO.address() != null) {
             user.setAddress(updateUserDTO.address());
         }
+        if (updateUserDTO.isAvailable() != null) {
+            user.setIsAvailable(updateUserDTO.isAvailable());
+        }
         if (updateUserDTO.lastDonationDate() != null) {
             user.setLastDonationDate(updateUserDTO.lastDonationDate());
         }
 
-        userRepository.save(user);
-
-        return mapToDTO(user);
-    }
-
-    public UserResponseDTO.Summary updateUserAvailability(String email, AvailabilityDTO availabilityDTO) {
-        User user = getUserByEmail(email);
-
-        user.setIsAvailable(availabilityDTO.isAvailable());
         userRepository.save(user);
 
         return mapToDTO(user);
@@ -122,7 +115,7 @@ public class UserService {
         );
     }
 
-    public Page<UserResponseDTO.Summary> searchByUsername(String email, String username, int page, int size) {
+    public Page<UserResponseDTO> searchByUsername(String email, String username, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         User user = getUserByEmail(email);
@@ -147,11 +140,12 @@ public class UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User data not found"));
     }
 
-    private UserResponseDTO.Summary mapToDTO(User user) {
-        return new UserResponseDTO.Summary(
+    private UserResponseDTO mapToDTO(User user) {
+        return new UserResponseDTO(
                 user.getId(),
                 user.getFullName(),
                 user.getEmail(),
+                user.getRole(),
                 user.getPhone(),
                 user.getAge(),
                 user.getBloodGroup(),
@@ -159,7 +153,8 @@ public class UserService {
                 user.getAddress(),
                 user.getAccountType(),
                 user.getIsAvailable(),
-                user.getLastDonationDate()
+                user.getLastDonationDate(),
+                user.getCreatedAt()
         );
     }
 }
