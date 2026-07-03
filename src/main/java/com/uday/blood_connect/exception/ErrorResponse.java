@@ -6,10 +6,10 @@ public record ErrorResponse(
 
         String status,
         String code,
-        Object error,
+        Object message,
         LocalDateTime timestamp
 ) {
-    public ErrorResponse(String code, Object error) {
-        this("error", code, error, LocalDateTime.now());
+    public ErrorResponse(String code, Object message) {
+        this("error", code, message, LocalDateTime.now());
     }
 }

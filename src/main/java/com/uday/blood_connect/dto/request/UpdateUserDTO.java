@@ -18,7 +18,7 @@ public record UpdateUserDTO(
 
         @Schema(description = "Updated phone number (10-20 digits)", example = "9876543210")
         @Pattern(regexp = "^[0-9]{10,20}$", message = "Phone number must be between 10 and 20 digits")
-        String phoneNumber,
+        String phone,
 
         @Schema(description = "Updated age of the user", example = "30")
         @Positive(message = "Age must be a positive number")
@@ -34,6 +34,9 @@ public record UpdateUserDTO(
         @Schema(description = "Updated address", example = "123 Main Street, Apt 4B")
         @Size(max = 255, message = "Address must be at most 255 characters")
         String address,
+
+        @Schema(description = "Availability status for blood donation", example = "true/false")
+        Boolean isAvailable,
 
         @Schema(description = "Last blood donation date (cannot be in the future)", example = "2025-06-01")
         @PastOrPresent(message = "Last donation date cannot be in the future")

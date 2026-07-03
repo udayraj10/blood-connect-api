@@ -3,12 +3,12 @@ package com.uday.blood_connect.controller;
 import com.uday.blood_connect.dto.response.ApiResponse;
 import com.uday.blood_connect.dto.response.UserResponseDTO;
 import com.uday.blood_connect.dto.response.UserStatsDTO;
-import com.uday.blood_connect.dto.request.AvailabilityDTO;
 import com.uday.blood_connect.dto.request.PasswordDTO;
 import com.uday.blood_connect.dto.request.UpdateUserDTO;
 import com.uday.blood_connect.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,32 +25,26 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse<UserResponseDTO.Summary>> getUserDetails(
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserDetails(
             @AuthenticationPrincipal UserDetails userDetails) {
+
         return ResponseEntity.ok(ApiResponse.success("User details retrieved successfully",
                 userService.getUserDetails(userDetails.getUsername())));
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<UserResponseDTO.Summary>> updateUserDetails(
+    public ResponseEntity<ApiResponse<UserResponseDTO>> updateUserDetails(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UpdateUserDTO updateUserDTO) {
+            @Valid @RequestBody UpdateUserDTO updateUserDTO) {
+
         return ResponseEntity.ok(ApiResponse.success("User details updated successfully",
                 userService.updateUserDetails(userDetails.getUsername(), updateUserDTO)));
-    }
-
-    @PatchMapping("/me/availability")
-    public ResponseEntity<ApiResponse<UserResponseDTO.Summary>> updateUserAvailability(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody AvailabilityDTO availabilityDTO) {
-        return ResponseEntity.ok(ApiResponse.success("User availability updated successfully",
-                userService.updateUserAvailability(userDetails.getUsername(), availabilityDTO)));
     }
 
     @PatchMapping("/me/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody PasswordDTO passwordDTO) {
+            @Valid @RequestBody PasswordDTO passwordDTO) {
 
         userService.changePassword(userDetails.getUsername(), passwordDTO);
         return ResponseEntity.ok(ApiResponse.success("Password changed successfully", null));
@@ -71,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<Page<UserResponseDTO.Summary>>> searchByUserName(
+    public ResponseEntity<ApiResponse<Page<UserResponseDTO>>> searchByUserName(
             @Parameter(description = "Search for registered users by their full name", example = "meera")
             @RequestParam("name") String searchUserName,
             @AuthenticationPrincipal UserDetails userDetails,

@@ -23,7 +23,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<JwtResponse> registerUser(@Valid @RequestBody RegisterDTO registerRequest) {
-        return ResponseEntity.ok(authService.registerUser(registerRequest));
+        return ResponseEntity.status(201).body(authService.registerUser(registerRequest));
     }
 
     @PostMapping("/login")

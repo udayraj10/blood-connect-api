@@ -20,7 +20,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public ResponseEntity<ApiResponse<Page<UserResponseDTO.Details>>> getAllUsers(
+    public ResponseEntity<ApiResponse<Page<UserResponseDTO>>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -30,7 +30,7 @@ public class AdminController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO.Details>> getUserById(
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(
             @Parameter(description = "The unique ID of the system user", example = "33")
             @PathVariable("userId") Long userId) {
 
