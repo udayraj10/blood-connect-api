@@ -69,7 +69,7 @@ public class AdminService {
         userRepository.delete(user);
     }
 
-    public Page<BloodRequestResponseDTO.Details> getAllBloodRequests(int page, int size) {
+    public Page<BloodRequestResponseDTO> getAllBloodRequests(int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         Page<BloodRequest> bloodRequests = bloodRequestRepository.findAll(pageable);
@@ -77,7 +77,7 @@ public class AdminService {
         return bloodRequests.map(this::mapToDTO);
     }
 
-    public BloodRequestResponseDTO.Details getBloodRequestById(Long requestId) {
+    public BloodRequestResponseDTO getBloodRequestById(Long requestId) {
         BloodRequest bloodRequest = bloodRequestService.getBloodRequestById(requestId);
 
         return mapToDTO(bloodRequest);
@@ -150,8 +150,8 @@ public class AdminService {
         );
     }
 
-    private BloodRequestResponseDTO.Details mapToDTO(BloodRequest bloodRequest) {
-        return new BloodRequestResponseDTO.Details(
+    private BloodRequestResponseDTO mapToDTO(BloodRequest bloodRequest) {
+        return new BloodRequestResponseDTO(
                 bloodRequest.getId(),
                 bloodRequest.getBloodGroup(),
                 bloodRequest.getCity(),
