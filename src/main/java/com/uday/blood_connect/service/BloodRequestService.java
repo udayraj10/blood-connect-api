@@ -29,7 +29,7 @@ public class BloodRequestService {
     private final MatchingService matchingService;
 
     @Transactional
-    public BloodRequestResponseDTO.Summary createBloodRequest(BloodRequestDTO bloodRequestDTO, String username) {
+    public BloodRequestResponseDTO createBloodRequest(BloodRequestDTO bloodRequestDTO, String username) {
 
         User requester = userService.getUserByEmail(username);
 
@@ -48,7 +48,7 @@ public class BloodRequestService {
         return mapToDTO(savedBloodRequest);
     }
 
-    public BloodRequestResponseDTO.Summary getBloodRequest(Long requestId, String username) {
+    public BloodRequestResponseDTO getBloodRequest(Long requestId, String username) {
 
         User user = userService.getUserByEmail(username);
 
@@ -84,7 +84,7 @@ public class BloodRequestService {
         ));
     }
 
-    public Page<BloodRequestResponseDTO.Summary> getBloodRequests(String username, int page, int size) {
+    public Page<BloodRequestResponseDTO> getBloodRequests(String username, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
         User user = userService.getUserByEmail(username);
@@ -95,7 +95,7 @@ public class BloodRequestService {
     }
 
     @Transactional
-    public BloodRequestResponseDTO.Summary cancelRequest(Long requestId, String username) {
+    public BloodRequestResponseDTO cancelRequest(Long requestId, String username) {
 
         BloodRequest bloodRequest = getBloodRequestById(requestId);
 
@@ -115,14 +115,15 @@ public class BloodRequestService {
                 .orElseThrow(() -> new ResourceNotFoundException("Blood request not found"));
     }
 
-    private BloodRequestResponseDTO.Summary mapToDTO(BloodRequest bloodRequest) {
-        return new BloodRequestResponseDTO.Summary(
+    private BloodRequestResponseDTO mapToDTO(BloodRequest bloodRequest) {
+        return new BloodRequestResponseDTO(
                 bloodRequest.getId(),
                 bloodRequest.getBloodGroup(),
                 bloodRequest.getCity(),
                 bloodRequest.getUrgencyLevel(),
                 bloodRequest.getStatus(),
-                bloodRequest.getMessage()
+                bloodRequest.getMessage(),
+                bloodRequest.getCreatedAt()
         );
     }
 }

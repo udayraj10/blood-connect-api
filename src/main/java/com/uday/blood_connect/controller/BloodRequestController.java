@@ -10,13 +10,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @Tag(name = "Blood Request Controller", description = "Endpoints for managing blood requests")
@@ -27,16 +24,16 @@ public class BloodRequestController {
     private final BloodRequestService bloodRequestService;
 
     @PostMapping("/")
-    public ResponseEntity<ApiResponse<BloodRequestResponseDTO.Summary>> createBloodRequest(
+    public ResponseEntity<ApiResponse<BloodRequestResponseDTO>> createBloodRequest(
             @AuthenticationPrincipal UserDetails user,
             @Valid @RequestBody BloodRequestDTO bloodRequestDTO) {
 
-        return ResponseEntity.ok(ApiResponse.success("Blood request created successfully",
+        return ResponseEntity.status(201).body(ApiResponse.success("Blood request created successfully",
                 bloodRequestService.createBloodRequest(bloodRequestDTO, user.getUsername())));
     }
 
     @GetMapping("/{requestId}")
-    public ResponseEntity<ApiResponse<BloodRequestResponseDTO.Summary>> getBloodRequest(
+    public ResponseEntity<ApiResponse<BloodRequestResponseDTO>> getBloodRequest(
             @Parameter(description = "The unique ID of the system user", example = "18")
             @PathVariable("requestId") Long requestId,
             @AuthenticationPrincipal UserDetails user) {
@@ -46,7 +43,7 @@ public class BloodRequestController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<ApiResponse<Page<BloodRequestResponseDTO.Summary>>> getBloodRequests(
+    public ResponseEntity<ApiResponse<Page<BloodRequestResponseDTO>>> getBloodRequests(
             @AuthenticationPrincipal UserDetails user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -68,7 +65,7 @@ public class BloodRequestController {
     }
 
     @PatchMapping("/{requestId}/cancel")
-    public ResponseEntity<ApiResponse<BloodRequestResponseDTO.Summary>> updateBloodRequestStatus(
+    public ResponseEntity<ApiResponse<BloodRequestResponseDTO>> cancelRequest(
             @Parameter(description = "The unique ID of the system user", example = "18")
             @PathVariable("requestId") Long requestId,
             @AuthenticationPrincipal UserDetails user) {
