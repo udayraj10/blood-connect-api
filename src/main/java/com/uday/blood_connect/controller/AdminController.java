@@ -66,7 +66,7 @@ public class AdminController {
     }
 
     @GetMapping("/blood-requests")
-    public ResponseEntity<ApiResponse<Page<BloodRequestResponseDTO.Details>>> getAllBloodRequests(
+    public ResponseEntity<ApiResponse<Page<BloodRequestResponseDTO>>> getAllBloodRequests(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -76,7 +76,7 @@ public class AdminController {
     }
 
     @GetMapping("/blood-requests/{requestId}")
-    public ResponseEntity<ApiResponse<BloodRequestResponseDTO.Details>> getBloodRequestById(
+    public ResponseEntity<ApiResponse<BloodRequestResponseDTO>> getBloodRequestById(
             @Parameter(description = "The unique ID of the system user", example = "18")
             @PathVariable("requestId") Long requestId) {
 
