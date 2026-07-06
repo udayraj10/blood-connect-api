@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     List<User> findByBloodGroup(BloodGroup bloodGroup);
 
-    List<User> findByBloodGroupAndCityAndIsAvailable(BloodGroup bloodGroup, String city, boolean isAvailable);
+    List<User> findByBloodGroupAndCityIgnoreCaseAndIsAvailable(BloodGroup bloodGroup, String city, boolean isAvailable);
 
     List<User> findByIsAvailableTrue();
 
