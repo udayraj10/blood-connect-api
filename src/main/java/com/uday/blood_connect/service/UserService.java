@@ -12,6 +12,7 @@ import com.uday.blood_connect.exception.UserAlreadyExistsException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import com.uday.blood_connect.repository.UserRepository;
+import com.uday.blood_connect.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,7 @@ public class UserService {
         User user = getUserByEmail(email);
 
         if (updateUserDTO.fullName() != null) {
-            user.setFullName(updateUserDTO.fullName());
+            user.setFullName(StringUtils.capitalizeFirstOnly(updateUserDTO.fullName()));
         }
         if (updateUserDTO.email() != null) {
             if (!user.getEmail().equals(updateUserDTO.email()) && userRepository.existsByEmail(updateUserDTO.email())) {
@@ -58,10 +59,10 @@ public class UserService {
             user.setBloodGroup(updateUserDTO.bloodGroup());
         }
         if (updateUserDTO.city() != null) {
-            user.setCity(updateUserDTO.city());
+            user.setCity(StringUtils.capitalizeFirstOnly(updateUserDTO.city()));
         }
         if (updateUserDTO.address() != null) {
-            user.setAddress(updateUserDTO.address());
+            user.setAddress(StringUtils.capitalizeFirstOnly(updateUserDTO.address()));
         }
         if (updateUserDTO.isAvailable() != null) {
             user.setIsAvailable(updateUserDTO.isAvailable());

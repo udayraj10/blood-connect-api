@@ -10,6 +10,7 @@ import com.uday.blood_connect.enums.RequestStatus;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
+import com.uday.blood_connect.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,10 +37,10 @@ public class BloodRequestService {
         BloodRequest bloodRequest = BloodRequest.builder()
                 .requester(requester)
                 .bloodGroup(bloodRequestDTO.bloodGroup())
-                .city(bloodRequestDTO.city())
+                .city(StringUtils.capitalizeFirstOnly(bloodRequestDTO.city()))
                 .urgencyLevel(bloodRequestDTO.urgencyLevel())
                 .status(RequestStatus.OPEN) // Default status
-                .message(bloodRequestDTO.message())
+                .message(StringUtils.capitalizeFirstOnly(bloodRequestDTO.message()))
                 .build();
 
         BloodRequest savedBloodRequest = bloodRequestRepository.save(bloodRequest);

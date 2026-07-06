@@ -8,6 +8,7 @@ import com.uday.blood_connect.enums.Role;
 import com.uday.blood_connect.exception.RoleNotFoundException;
 import com.uday.blood_connect.exception.UserAlreadyExistsException;
 import com.uday.blood_connect.repository.UserRepository;
+import com.uday.blood_connect.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,14 +37,14 @@ public class AuthService {
         registerDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
 
         User user = User.builder()
-                .fullName(registerDTO.getFullName())
+                .fullName(StringUtils.capitalizeFirstOnly(registerDTO.getFullName()))
                 .email(registerDTO.getEmail())
                 .password(registerDTO.getPassword())
                 .age(registerDTO.getAge())
                 .phone(registerDTO.getPhone())
                 .bloodGroup(registerDTO.getBloodGroup())
-                .city(registerDTO.getCity())
-                .address(registerDTO.getAddress())
+                .city(StringUtils.capitalizeFirstOnly(registerDTO.getCity()))
+                .address(StringUtils.capitalizeFirstOnly(registerDTO.getAddress()))
                 .accountType(registerDTO.getAccountType())
                 .role(Role.USER) // Default role is USER
                 .isAvailable(registerDTO.getIsAvailable())
