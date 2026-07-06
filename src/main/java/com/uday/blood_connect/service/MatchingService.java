@@ -10,7 +10,6 @@ import com.uday.blood_connect.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,7 +21,7 @@ public class MatchingService {
 
     public void findMatchingUsers(BloodRequest bloodRequest, User requester) {
 
-        List<User> matchedUsers = userRepository.findByBloodGroupAndCityAndIsAvailable(
+        List<User> matchedUsers = userRepository.findByBloodGroupAndCityIgnoreCaseAndIsAvailable(
                         bloodRequest.getBloodGroup(),
                         bloodRequest.getCity(),
                         true
