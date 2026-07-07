@@ -32,6 +32,15 @@ public class DonationOfferService {
         return requests.map(this::mapToDTO);
     }
 
+    public DonationOfferResponseDTO getOfferById(String username, Long offerId) {
+
+        DonationOffer offer = getOfferById(offerId);
+
+        offer.verifyDonor(userService.getUserByEmail(username));
+
+        return mapToDTO(offer);
+    }
+
     @Transactional
     public DonationOfferResponseDTO acceptOffer(Long offerId, String username) {
 
