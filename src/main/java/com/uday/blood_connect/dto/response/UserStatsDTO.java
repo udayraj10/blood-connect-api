@@ -15,6 +15,9 @@ public record UserStatsDTO(
         @Schema(description = "Number of accepted donation offers from this user", example = "3")
         Long acceptedOffers,
 
+        @Schema(description = "Number of completed donation offers from this user", example = "1")
+        Long completedOffers,
+
         @Schema(description = "Number of declined donation offers from this user", example = "1")
         Long declinedOffers,
 
