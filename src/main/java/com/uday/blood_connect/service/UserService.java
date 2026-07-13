@@ -108,6 +108,7 @@ public class UserService {
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.PENDING),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.ACCEPTED),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.COMPLETED),
+                donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.DECLINED),
                 user.getLastDonationDate(),
                 bloodRequestRepository.countByRequesterId(user.getId()),
                 bloodRequestRepository.countByRequesterIdAndStatus(user.getId(), RequestStatus.OPEN),
