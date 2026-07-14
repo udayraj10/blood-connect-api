@@ -48,16 +48,16 @@ public class UserService {
     public UserResponseDTO updateUserDetails(String email, UpdateUserDTO updateUserDTO) {
         User user = getUserByEmail(email);
 
-        if (updateUserDTO.fullName() != null) {
+        if (updateUserDTO.fullName() != null && !updateUserDTO.fullName().isBlank()) {
             user.setFullName(StringUtils.capitalizeFirstOnly(updateUserDTO.fullName()));
         }
-        if (updateUserDTO.email() != null) {
+        if (updateUserDTO.email() != null && !updateUserDTO.email().isBlank()) {
             if (!user.getEmail().equals(updateUserDTO.email()) && userRepository.existsByEmail(updateUserDTO.email())) {
                 throw new UserAlreadyExistsException("Email already exists: " + updateUserDTO.email());
             }
             user.setEmail(updateUserDTO.email());
         }
-        if (updateUserDTO.phone() != null) {
+        if (updateUserDTO.phone() != null && !updateUserDTO.phone().isBlank()) {
             user.setPhone(updateUserDTO.phone());
         }
         if (updateUserDTO.age() != null) {
@@ -66,10 +66,10 @@ public class UserService {
         if (updateUserDTO.bloodGroup() != null) {
             user.setBloodGroup(updateUserDTO.bloodGroup());
         }
-        if (updateUserDTO.city() != null) {
+        if (updateUserDTO.city() != null && !updateUserDTO.city().isBlank()) {
             user.setCity(StringUtils.capitalizeFirstOnly(updateUserDTO.city()));
         }
-        if (updateUserDTO.address() != null) {
+        if (updateUserDTO.address() != null && !updateUserDTO.address().isBlank()) {
             user.setAddress(StringUtils.capitalizeFirstOnly(updateUserDTO.address()));
         }
         if (updateUserDTO.isAvailable() != null) {
