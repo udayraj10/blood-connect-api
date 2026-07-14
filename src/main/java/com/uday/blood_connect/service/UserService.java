@@ -36,6 +36,14 @@ public class UserService {
         return mapToDTO(user);
     }
 
+    public UserResponseDTO getUserDetailsById(String email, Long id) {
+        getUserByEmail(email);
+
+        User searchedUser = getUserById(id);
+
+        return mapToDTO(searchedUser);
+    }
+
     @Transactional
     public UserResponseDTO updateUserDetails(String email, UpdateUserDTO updateUserDTO) {
         User user = getUserByEmail(email);
@@ -129,7 +137,7 @@ public class UserService {
         Page<User> users = userRepository.searchByUserFullName(username, user.getId(), pageable);
 
         if (users.isEmpty()) {
-            throw new ResourceNotFoundException("No user available with name");
+            throw new ResourceNotFoundException("No user available");
         }
 
         return users.map(this::mapToDTO);

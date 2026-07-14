@@ -32,6 +32,15 @@ public class UserController {
                 userService.getUserDetails(userDetails.getUsername())));
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserDetailsById(
+            @PathVariable("userId") Long userId,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        return ResponseEntity.ok(ApiResponse.success("User details retrieved successfully",
+                userService.getUserDetailsById(userDetails.getUsername(), userId)));
+    }
+
     @PatchMapping("/me")
     public ResponseEntity<ApiResponse<UserResponseDTO>> updateUserDetails(
             @AuthenticationPrincipal UserDetails userDetails,
