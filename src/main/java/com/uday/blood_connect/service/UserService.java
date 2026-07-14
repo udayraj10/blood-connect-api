@@ -120,6 +120,10 @@ public class UserService {
     public Page<UserResponseDTO> searchByUsername(String email, String username, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
+        if (username == null || username.trim().isEmpty()) {
+            return Page.empty(pageable);
+        }
+
         User user = getUserByEmail(email);
 
         Page<User> users = userRepository.searchByUserFullName(username, user.getId(), pageable);
