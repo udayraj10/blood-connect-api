@@ -8,7 +8,8 @@ public enum OfferStatus {
     ACCEPTED,
     DECLINED,
     COMPLETED,
-    CANCELLED;
+    CANCELLED,
+    CLOSED;
 
     @JsonCreator
     public static OfferStatus fromString(String status) {
