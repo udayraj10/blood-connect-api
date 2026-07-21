@@ -7,6 +7,7 @@ import com.uday.blood_connect.entity.BloodRequest;
 import com.uday.blood_connect.entity.DonationOffer;
 import com.uday.blood_connect.entity.User;
 import com.uday.blood_connect.enums.RequestStatus;
+import com.uday.blood_connect.exception.ResourceEmptyException;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
@@ -60,19 +61,19 @@ public class BloodRequestService {
     }
 
     public Page<MatchResultsDTO> getDonorsForRequest(Long requestId, String username, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("offeredAt").ascending());
 
         User user = userService.getUserByEmail(username);
 
         BloodRequest bloodRequest = bloodRequestRepository.findById(requestId)
                 .orElseThrow(() -> new ResourceNotFoundException("Blood request not found"));
 
-        Page<DonationOffer> offerPage = donationOfferRepository.findByBloodRequestId(requestId, pageable);
-
         bloodRequest.verifyOwner(user);
 
+        Page<DonationOffer> offerPage = donationOfferRepository.findByBloodRequestId(requestId, pageable);
+
         if (offerPage.isEmpty()) {
-            throw new ResourceNotFoundException("No donors found for this request");
+            throw new ResourceEmptyException("No donors found for this request");
         }
 
         return offerPage.map(offer -> new MatchResultsDTO(
@@ -86,11 +87,15 @@ public class BloodRequestService {
     }
 
     public Page<BloodRequestResponseDTO> getBloodRequests(String username, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         User user = userService.getUserByEmail(username);
 
         Page<BloodRequest> requests = bloodRequestRepository.findByRequester(user, pageable);
+
+        if (requests.isEmpty()) {
+            throw new ResourceEmptyException("No active blood requests found");
+        }
 
         return requests.map(this::mapToDTO);
     }
