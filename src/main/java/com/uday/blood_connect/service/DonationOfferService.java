@@ -4,6 +4,7 @@ import com.uday.blood_connect.dto.response.DonationOfferResponseDTO;
 import com.uday.blood_connect.entity.BloodRequest;
 import com.uday.blood_connect.entity.DonationOffer;
 import com.uday.blood_connect.entity.User;
+import com.uday.blood_connect.exception.ResourceEmptyException;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
@@ -27,13 +28,17 @@ public class DonationOfferService {
     private final UserService userService;
 
     public Page<DonationOfferResponseDTO> getRequestOffers(String username, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("offeredAt").descending());
 
         User user = userService.getUserByEmail(username);
 
-        Page<DonationOffer> requests = donationOfferRepository.findByDonor(user, pageable);
+        Page<DonationOffer> offers = donationOfferRepository.findByDonor(user, pageable);
 
-        return requests.map(this::mapToDTO);
+        if (offers.isEmpty()) {
+            throw new ResourceEmptyException("No offers are available");
+        }
+
+        return offers.map(this::mapToDTO);
     }
 
     public DonationOfferResponseDTO getOfferById(String username, Long offerId) {
