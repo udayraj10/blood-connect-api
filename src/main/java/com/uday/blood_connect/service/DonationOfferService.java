@@ -1,9 +1,12 @@
 package com.uday.blood_connect.service;
 
 import com.uday.blood_connect.dto.response.DonationOfferResponseDTO;
+import com.uday.blood_connect.entity.BloodRequest;
 import com.uday.blood_connect.entity.DonationOffer;
 import com.uday.blood_connect.entity.User;
+import com.uday.blood_connect.exception.ResourceEmptyException;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
+import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,16 +24,30 @@ import java.util.List;
 public class DonationOfferService {
 
     private final DonationOfferRepository donationOfferRepository;
+    private final BloodRequestRepository bloodRequestRepository;
     private final UserService userService;
 
     public Page<DonationOfferResponseDTO> getRequestOffers(String username, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("offeredAt").descending());
 
         User user = userService.getUserByEmail(username);
 
-        Page<DonationOffer> requests = donationOfferRepository.findByDonor(user, pageable);
+        Page<DonationOffer> offers = donationOfferRepository.findByDonor(user, pageable);
 
-        return requests.map(this::mapToDTO);
+        if (offers.isEmpty()) {
+            throw new ResourceEmptyException("No offers are available");
+        }
+
+        return offers.map(this::mapToDTO);
+    }
+
+    public DonationOfferResponseDTO getOfferById(String username, Long offerId) {
+
+        DonationOffer offer = getOfferById(offerId);
+
+        offer.verifyDonor(userService.getUserByEmail(username));
+
+        return mapToDTO(offer);
     }
 
     @Transactional
@@ -63,12 +81,24 @@ public class DonationOfferService {
     public DonationOfferResponseDTO completeOffer(Long offerId, String username) {
 
         DonationOffer offer = getOfferById(offerId);
+        BloodRequest bloodRequest = offer.getBloodRequest();
 
         offer.verifyDonor(userService.getUserByEmail(username));
 
         offer.complete();
 
-        donationOfferRepository.save(offer);
+        bloodRequest.fulfillRequest();
+
+        List<DonationOffer> otherOffers =
+                donationOfferRepository.findByBloodRequestIdAndIdNot(offer.getBloodRequest().getId(), offer.getId());
+
+        otherOffers.forEach(DonationOffer::close);
+
+        List<DonationOffer> allOffers = new ArrayList<>(otherOffers);
+        allOffers.add(offer);
+
+        donationOfferRepository.saveAll(allOffers);
+        bloodRequestRepository.save(bloodRequest);
 
         return mapToDTO(offer);
     }

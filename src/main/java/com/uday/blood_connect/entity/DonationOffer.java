@@ -78,6 +78,9 @@ public class DonationOffer {
         }
         this.status = OfferStatus.COMPLETED;
         this.respondedAt = LocalDateTime.now();
-        this.bloodRequest.setStatus(RequestStatus.FULFILLED);
+    }
+
+    public void close() {
+        this.status = OfferStatus.CLOSED;
     }
 }

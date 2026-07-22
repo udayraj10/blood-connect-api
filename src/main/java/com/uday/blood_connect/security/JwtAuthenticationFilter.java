@@ -59,12 +59,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 } else {
                     handlerExceptionResolver.resolveException(request, response, null,
                             new BadCredentialsException("Invalid or expired JWT token"));
+                    return;
                 }
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException |
                  UsernameNotFoundException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
+            return;
         }
     }
 }

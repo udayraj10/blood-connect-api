@@ -12,6 +12,7 @@ import com.uday.blood_connect.exception.UserAlreadyExistsException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
 import com.uday.blood_connect.repository.UserRepository;
+import com.uday.blood_connect.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,20 +36,28 @@ public class UserService {
         return mapToDTO(user);
     }
 
+    public UserResponseDTO getUserDetailsById(String email, Long id) {
+        getUserByEmail(email);
+
+        User searchedUser = getUserById(id);
+
+        return mapToDTO(searchedUser);
+    }
+
     @Transactional
     public UserResponseDTO updateUserDetails(String email, UpdateUserDTO updateUserDTO) {
         User user = getUserByEmail(email);
 
-        if (updateUserDTO.fullName() != null) {
-            user.setFullName(updateUserDTO.fullName());
+        if (updateUserDTO.fullName() != null && !updateUserDTO.fullName().isBlank()) {
+            user.setFullName(StringUtils.capitalizeFirstOnly(updateUserDTO.fullName()));
         }
-        if (updateUserDTO.email() != null) {
+        if (updateUserDTO.email() != null && !updateUserDTO.email().isBlank()) {
             if (!user.getEmail().equals(updateUserDTO.email()) && userRepository.existsByEmail(updateUserDTO.email())) {
                 throw new UserAlreadyExistsException("Email already exists: " + updateUserDTO.email());
             }
             user.setEmail(updateUserDTO.email());
         }
-        if (updateUserDTO.phone() != null) {
+        if (updateUserDTO.phone() != null && !updateUserDTO.phone().isBlank()) {
             user.setPhone(updateUserDTO.phone());
         }
         if (updateUserDTO.age() != null) {
@@ -57,11 +66,11 @@ public class UserService {
         if (updateUserDTO.bloodGroup() != null) {
             user.setBloodGroup(updateUserDTO.bloodGroup());
         }
-        if (updateUserDTO.city() != null) {
-            user.setCity(updateUserDTO.city());
+        if (updateUserDTO.city() != null && !updateUserDTO.city().isBlank()) {
+            user.setCity(StringUtils.capitalizeFirstOnly(updateUserDTO.city()));
         }
-        if (updateUserDTO.address() != null) {
-            user.setAddress(updateUserDTO.address());
+        if (updateUserDTO.address() != null && !updateUserDTO.address().isBlank()) {
+            user.setAddress(StringUtils.capitalizeFirstOnly(updateUserDTO.address()));
         }
         if (updateUserDTO.isAvailable() != null) {
             user.setIsAvailable(updateUserDTO.isAvailable());
@@ -103,10 +112,11 @@ public class UserService {
         User user = getUserByEmail(username);
 
         return new UserStatsDTO(
-                donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.COMPLETED),
+                donationOfferRepository.countByDonorId(user.getId()),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.PENDING),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.ACCEPTED),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.COMPLETED),
+                donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.DECLINED),
                 user.getLastDonationDate(),
                 bloodRequestRepository.countByRequesterId(user.getId()),
                 bloodRequestRepository.countByRequesterIdAndStatus(user.getId(), RequestStatus.OPEN),
@@ -118,12 +128,16 @@ public class UserService {
     public Page<UserResponseDTO> searchByUsername(String email, String username, int page, int size) {
         PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
+        if (username == null || username.trim().isEmpty()) {
+            return Page.empty(pageable);
+        }
+
         User user = getUserByEmail(email);
 
         Page<User> users = userRepository.searchByUserFullName(username, user.getId(), pageable);
 
         if (users.isEmpty()) {
-            throw new ResourceNotFoundException("No user available with name");
+            throw new ResourceNotFoundException("No user available");
         }
 
         return users.map(this::mapToDTO);

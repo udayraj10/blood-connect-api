@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,6 +18,10 @@ public interface DonationOfferRepository extends JpaRepository<DonationOffer, Lo
     Page<DonationOffer> findByDonor(User donor, Pageable pageable);
 
     Page<DonationOffer> findByBloodRequestId(Long id, Pageable pageable);
+
+    List<DonationOffer> findByBloodRequestIdAndIdNot(Long requestId, Long offerId);
+
+    long countByDonorId(Long donorId);
 
     long countByDonorIdAndStatus(Long donorId, OfferStatus status);
 

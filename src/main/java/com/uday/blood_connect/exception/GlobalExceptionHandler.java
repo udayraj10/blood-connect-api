@@ -30,6 +30,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(errorResponse);
     }
 
+    @ExceptionHandler(ResourceEmptyException.class)
+    public ResponseEntity<ErrorResponse> handleResourceEmpty(ResourceEmptyException ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse(
+                "'NOT_FOUND",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(404).body(errorResponse);
+    }
+
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
 

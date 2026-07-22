@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :fullName, '%')) " +
+    @Query("SELECT u FROM User u WHERE LOWER(u.fullName) LIKE LOWER(CONCAT(:fullName, '%')) " +
             "AND u.role = 'USER' " +
             "AND u.id != :currentUserId")
     Page<User> searchByUserFullName(

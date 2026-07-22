@@ -28,11 +28,11 @@ public record UpdateUserDTO(
         BloodGroup bloodGroup,
 
         @Schema(description = "Updated city", example = "Mumbai")
-        @Size(max = 100, message = "City must be at most 100 characters")
+        @Size(min = 2, message = "City must be at least 5 characters")
         String city,
 
         @Schema(description = "Updated address", example = "123 Main Street, Apt 4B")
-        @Size(max = 255, message = "Address must be at most 255 characters")
+        @Size(min = 5, message = "Address must be at least 5 characters")
         String address,
 
         @Schema(description = "Availability status for blood donation", example = "true/false")

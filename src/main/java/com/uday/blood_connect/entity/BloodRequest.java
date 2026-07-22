@@ -113,4 +113,12 @@ public class BloodRequest {
 
         donationOffer.accept();
     }
+
+    public void fulfillRequest() {
+        if (this.getStatus() == RequestStatus.FULFILLED) {
+            throw new RequestAlreadyFulFilledException("Request already fulfilled");
+        }
+
+        this.setStatus(RequestStatus.FULFILLED);
+    }
 }

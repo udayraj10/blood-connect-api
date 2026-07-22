@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Donation Offer Controller", description = "Endpoints for managing donation offers")
-@RequestMapping("/api/donations")
+@RequestMapping("/api/offers")
 @RequiredArgsConstructor
 public class DonationOfferController {
 
     private final DonationOfferService donationOfferService;
 
-    @GetMapping("/offers")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse<Page<DonationOfferResponseDTO>>> getRequestOffers(
             @AuthenticationPrincipal UserDetails user,
             @RequestParam(defaultValue = "0") int page,
@@ -31,9 +31,19 @@ public class DonationOfferController {
                 donationOfferService.getRequestOffers(user.getUsername(), page, size)));
     }
 
-    @PatchMapping("/offers/{offerId}/accept")
+    @GetMapping("/{offerId}")
+    public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> getOfferById(
+            @Parameter(description = "The unique ID of the offer", example = "1")
+            @PathVariable("offerId") Long offerId,
+            @AuthenticationPrincipal UserDetails user) {
+
+        return ResponseEntity.ok(ApiResponse.success("Blood request retrieved successfully",
+                donationOfferService.getOfferById(user.getUsername(), offerId)));
+    }
+
+    @PatchMapping("/{offerId}/accept")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> acceptOffer(
-            @Parameter(description = "The unique ID of the system user", example = "1")
+            @Parameter(description = "The unique ID of the offer", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
@@ -41,9 +51,9 @@ public class DonationOfferController {
                 donationOfferService.acceptOffer(offerId, user.getUsername())));
     }
 
-    @PatchMapping("/offers/{offerId}/decline")
+    @PatchMapping("/{offerId}/decline")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> declineOffer(
-            @Parameter(description = "The unique ID of the system user", example = "1")
+            @Parameter(description = "The unique ID of the offer", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
@@ -51,9 +61,9 @@ public class DonationOfferController {
                 donationOfferService.declineOffer(offerId, user.getUsername())));
     }
 
-    @PatchMapping("/offers/{offerId}/complete")
+    @PatchMapping("/{offerId}/complete")
     public ResponseEntity<ApiResponse<DonationOfferResponseDTO>> completeOffer(
-            @Parameter(description = "The unique ID of the system user", example = "1")
+            @Parameter(description = "The unique ID of the offer", example = "1")
             @PathVariable("offerId") Long offerId,
             @AuthenticationPrincipal UserDetails user) {
 
