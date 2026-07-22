@@ -21,6 +21,8 @@ public interface DonationOfferRepository extends JpaRepository<DonationOffer, Lo
 
     List<DonationOffer> findByBloodRequestIdAndIdNot(Long requestId, Long offerId);
 
+    long countByDonorId(Long donorId);
+
     long countByDonorIdAndStatus(Long donorId, OfferStatus status);
 
     long countByStatus(OfferStatus status);

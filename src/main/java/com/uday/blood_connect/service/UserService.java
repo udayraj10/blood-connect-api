@@ -112,7 +112,7 @@ public class UserService {
         User user = getUserByEmail(username);
 
         return new UserStatsDTO(
-                donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.COMPLETED),
+                donationOfferRepository.countByDonorId(user.getId()),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.PENDING),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.ACCEPTED),
                 donationOfferRepository.countByDonorIdAndStatus(user.getId(), OfferStatus.COMPLETED),
