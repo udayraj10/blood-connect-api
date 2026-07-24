@@ -134,7 +134,7 @@ public class UserService {
 
         User user = getUserByEmail(email);
 
-        Page<User> users = userRepository.searchByUserFullName(username, user.getId(), pageable);
+        Page<User> users = userRepository.searchByUserFullName(username.trim(), user.getId(), pageable);
 
         if (users.isEmpty()) {
             throw new ResourceNotFoundException("No user available");

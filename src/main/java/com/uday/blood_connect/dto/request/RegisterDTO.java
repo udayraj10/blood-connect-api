@@ -66,4 +66,24 @@ public class RegisterDTO {
     @Schema(description = "Last blood donation date in dd-MM-yyyy format", example = "01-06-2025")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate lastDonationDate;
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName != null ? fullName.trim() : null;
+    }
+
+    public void setEmail(String email) {
+        this.email = email != null ? email.trim() : null;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone != null ? phone.trim() : null;
+    }
+
+    public void setCity(String city) {
+        this.city = city != null ? city.trim() : null;
+    }
+
+    public void setAddress(String address) {
+        this.address = address != null ? address.trim() : null;
+    }
 }

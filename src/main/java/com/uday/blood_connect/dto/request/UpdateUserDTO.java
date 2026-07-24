@@ -42,4 +42,11 @@ public record UpdateUserDTO(
         @PastOrPresent(message = "Last donation date cannot be in the future")
         LocalDate lastDonationDate
 ) {
+    public UpdateUserDTO {
+        if (fullName != null) fullName = fullName.trim();
+        if (email != null) email = email.trim();
+        if (phone != null) phone = phone.trim();
+        if (city != null) city = city.trim();
+        if (address != null) address = address.trim();
+    }
 }

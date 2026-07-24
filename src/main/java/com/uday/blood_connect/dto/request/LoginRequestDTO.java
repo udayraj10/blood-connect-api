@@ -17,4 +17,7 @@ public record LoginRequestDTO(
         @Size(min = 6, message = "Password must be at least 6 characters")
         String password
 ) {
+    public LoginRequestDTO {
+        if (email != null) email = email.trim();
+    }
 }

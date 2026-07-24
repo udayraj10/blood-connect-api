@@ -27,4 +27,8 @@ public record BloodRequestDTO(
         String message
 
 ) {
+    public BloodRequestDTO {
+        if (city != null) city = city.trim();
+        if (message != null) message = message.trim();
+    }
 }
