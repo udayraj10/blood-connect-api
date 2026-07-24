@@ -8,6 +8,7 @@ import com.uday.blood_connect.exception.ResourceEmptyException;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
 import com.uday.blood_connect.repository.DonationOfferRepository;
+import com.uday.blood_connect.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ public class DonationOfferService {
 
     private final DonationOfferRepository donationOfferRepository;
     private final BloodRequestRepository bloodRequestRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     public Page<DonationOfferResponseDTO> getRequestOffers(String username, int page, int size) {
@@ -80,14 +82,17 @@ public class DonationOfferService {
     @Transactional
     public DonationOfferResponseDTO completeOffer(Long offerId, String username) {
 
+        User user = userService.getUserByEmail(username);
         DonationOffer offer = getOfferById(offerId);
         BloodRequest bloodRequest = offer.getBloodRequest();
 
-        offer.verifyDonor(userService.getUserByEmail(username));
+        offer.verifyDonor(user);
 
         offer.complete();
 
         bloodRequest.fulfillRequest();
+
+        user.updateLastDonation();
 
         List<DonationOffer> otherOffers =
                 donationOfferRepository.findByBloodRequestIdAndIdNot(offer.getBloodRequest().getId(), offer.getId());
@@ -99,6 +104,7 @@ public class DonationOfferService {
 
         donationOfferRepository.saveAll(allOffers);
         bloodRequestRepository.save(bloodRequest);
+        userRepository.save(user);
 
         return mapToDTO(offer);
     }

@@ -109,4 +109,8 @@ public class User {
     public void activate() {
         this.isActive = true;
     }
+
+    public void updateLastDonation() {
+        this.lastDonationDate = LocalDate.now();
+    }
 }

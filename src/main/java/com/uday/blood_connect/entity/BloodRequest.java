@@ -88,7 +88,7 @@ public class BloodRequest {
     public void ensureOpenStatus() {
         if (this.getStatus() != RequestStatus.OPEN) {
             throw new RequestAlreadyFulFilledException(
-                    "Cannot perform this action. Only open requests can be modified."
+                    "Only open requests can be modified."
             );
         }
     }
@@ -115,9 +115,7 @@ public class BloodRequest {
     }
 
     public void fulfillRequest() {
-        if (this.getStatus() == RequestStatus.FULFILLED) {
-            throw new RequestAlreadyFulFilledException("Request already fulfilled");
-        }
+        ensureOpenStatus();
 
         this.setStatus(RequestStatus.FULFILLED);
     }
