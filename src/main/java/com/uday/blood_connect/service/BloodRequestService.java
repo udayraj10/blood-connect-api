@@ -82,7 +82,8 @@ public class BloodRequestService {
                 offer.getDonor().getCity(),
                 offer.getDonor().getBloodGroup(),
                 offer.getStatus(),
-                offer.getOfferedAt()
+                offer.getOfferedAt(),
+                offer.getRespondedAt()
         ));
     }
 
