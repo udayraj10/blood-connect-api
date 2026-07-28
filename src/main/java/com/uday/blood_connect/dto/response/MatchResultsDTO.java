@@ -24,6 +24,9 @@ public record MatchResultsDTO(
         OfferStatus offerStatus,
 
         @Schema(description = "Timestamp when the offer was made", example = "2025-06-06T10:30:00")
-        LocalDateTime offeredAt
+        LocalDateTime offeredAt,
+
+        @Schema(description = "Timestamp when the response was made", example = "2025-07-06T12:35:00")
+        LocalDateTime respondedAt
 ) {
 }
