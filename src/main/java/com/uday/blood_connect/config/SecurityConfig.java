@@ -81,7 +81,7 @@ public class SecurityConfig {
                 "http://localhost:*",
                 "http://127.0.0.1:*",
                 "http://192.168.*:*",           // Local Wi-Fi testing for mobile
-                "https://*.github.io"           // GitHub Pages deployment
+                "https://*.vercel.app*"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "PUT", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
