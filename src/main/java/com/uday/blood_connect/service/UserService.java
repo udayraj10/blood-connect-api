@@ -5,8 +5,10 @@ import com.uday.blood_connect.dto.response.UserStatsDTO;
 import com.uday.blood_connect.dto.request.PasswordDTO;
 import com.uday.blood_connect.dto.request.UpdateUserDTO;
 import com.uday.blood_connect.entity.User;
+import com.uday.blood_connect.enums.BloodGroup;
 import com.uday.blood_connect.enums.OfferStatus;
 import com.uday.blood_connect.enums.RequestStatus;
+import com.uday.blood_connect.exception.ResourceEmptyException;
 import com.uday.blood_connect.exception.ResourceNotFoundException;
 import com.uday.blood_connect.exception.UserAlreadyExistsException;
 import com.uday.blood_connect.repository.BloodRequestRepository;
@@ -20,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -125,19 +129,26 @@ public class UserService {
         );
     }
 
-    public Page<UserResponseDTO> searchByUsername(String email, String username, int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-
-        if (username == null || username.trim().isEmpty()) {
-            return Page.empty(pageable);
+    public Page<UserResponseDTO> getUsersBySearch(String email, String query, int page, int size) {
+        if (query == null || query.isBlank()) {
+            return Page.empty(PageRequest.of(page, size));
         }
 
+        String cleanQuery = query.trim();
+
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         User user = getUserByEmail(email);
 
-        Page<User> users = userRepository.searchByUserFullName(username.trim(), user.getId(), pageable);
+        if (isBloodGroupQuery(cleanQuery)) {
+            List<BloodGroup> targetGroups = BloodGroup.resolveMatchingGroups(query);
+            Page<User> users = userRepository.searchByBloodGroup(targetGroups, user.getId(), pageable);
+            return users.map(this::mapToDTO);
+        }
+
+        Page<User> users = userRepository.searchByFullNameOrCity(cleanQuery, user.getId(), pageable);
 
         if (users.isEmpty()) {
-            throw new ResourceNotFoundException("No user available");
+            throw new ResourceEmptyException("No user available");
         }
 
         return users.map(this::mapToDTO);
@@ -170,5 +181,9 @@ public class UserService {
                 user.getLastDonationDate(),
                 user.getCreatedAt()
         );
+    }
+
+    private boolean isBloodGroupQuery(String input) {
+        return input.matches("(?i)^(A|B|AB|O)[+-]?$");
     }
 }
