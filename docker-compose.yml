@@ -2,10 +2,12 @@ version: '3.8'
 
 services:
   bloodconnect:
-    build: src/main/java
+    build: .
     container_name: bloodconnect-api
     ports:
       - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     env_file:
-      - .env
+      - .env.prod
     restart: unless-stopped
