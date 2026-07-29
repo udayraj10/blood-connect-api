@@ -18,22 +18,23 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE LOWER(u.fullName) LIKE LOWER(CONCAT(:fullName, '%')) " +
+    @Query("SELECT u FROM User u WHERE u.bloodGroup IN :bloodGroups AND u.role = 'USER' " +
+            "AND u.id != :currentUserId")
+    Page<User> searchByBloodGroup(
+            @Param("bloodGroups") List<BloodGroup> bloodGroups,
+            @Param("currentUserId") Long currentUserId,
+            Pageable pageable);
+
+    @Query("SELECT u FROM User u WHERE (LOWER(u.fullName) LIKE LOWER(CONCAT(:query, '%')) " +
+            "OR LOWER(u.city) LIKE LOWER(CONCAT(:query, '%'))) " +
             "AND u.role = 'USER' " +
             "AND u.id != :currentUserId")
-    Page<User> searchByUserFullName(
-            @Param("fullName") String fullName,
+    Page<User> searchByFullNameOrCity(
+            @Param("query") String query,
             @Param("currentUserId") Long currentUserId,
-            Pageable pageable
-    );
-
-    List<User> findByBloodGroup(BloodGroup bloodGroup);
+            Pageable pageable);
 
     List<User> findByBloodGroupAndCityIgnoreCaseAndIsAvailable(BloodGroup bloodGroup, String city, boolean isAvailable);
-
-    List<User> findByIsAvailableTrue();
-
-    List<User> findByBloodGroupAndIsAvailableTrue(BloodGroup bloodGroup);
 
     boolean existsByEmail(String email);
 
