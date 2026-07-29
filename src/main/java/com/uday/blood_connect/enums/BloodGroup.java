@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.uday.blood_connect.exception.InvalidEnumException;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum BloodGroup {
     A_POS("A+"),
     A_NEG("A-"),
@@ -14,15 +19,15 @@ public enum BloodGroup {
     O_POS("O+"),
     O_NEG("O-");
 
-    private final String displayName;
+    private final String value;
 
-    BloodGroup(String displayName) {
-        this.displayName = displayName;
+    BloodGroup(String value) {
+        this.value = value;
     }
 
     @JsonValue
     public String getDisplayName() {
-        return displayName;
+        return value;
     }
 
     @JsonCreator
@@ -32,11 +37,31 @@ public enum BloodGroup {
         }
 
         for (BloodGroup group : BloodGroup.values()) {
-            if (group.displayName.equalsIgnoreCase(value.trim())) {
+            if (group.value.equalsIgnoreCase(value.trim())) {
                 return group;
             }
         }
 
         throw new InvalidEnumException("Invalid blood group: " + value);
+    }
+
+    public static List<BloodGroup> resolveMatchingGroups(String input) {
+        if (input == null || input.isBlank()) {
+            return Collections.emptyList();
+        }
+
+        String cleanInput = input.trim().toUpperCase();
+
+        return Arrays.stream(values())
+                .filter(enumVal -> {
+
+                    if (enumVal.value.equalsIgnoreCase(cleanInput)) {
+                        return true;
+                    }
+
+                    String baseGroup = enumVal.value.replaceAll("[+-]", "");
+                    return baseGroup.equalsIgnoreCase(cleanInput);
+                })
+                .collect(Collectors.toList());
     }
 }
