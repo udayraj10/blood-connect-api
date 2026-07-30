@@ -76,12 +76,12 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<Page<UserResponseDTO>>> getUsersByBloodGroup(
             @Parameter(description = "Search for blood group, city and username", example = "O+")
-            @RequestParam("bloodGroup") String bloodGroup,
+            @RequestParam("query") String query,
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(ApiResponse.success("Users fetched successfully",
-                userService.getUsersBySearch(userDetails.getUsername(), bloodGroup, page, size)));
+                userService.getUsersBySearch(userDetails.getUsername(), query, page, size)));
     }
 }
