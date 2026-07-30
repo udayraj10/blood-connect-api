@@ -2,6 +2,9 @@
 .env
 .env.*
 
+# Insert statements
+data.sql
+
 HELP.md
 target/
 *./jar
