@@ -117,16 +117,17 @@ public class AdminService {
 
         return new StatsResponseDTO(
                 userRepository.count(),
+                userRepository.countByIsActive(true),
+                userRepository.countByIsActive(false),
+                userRepository.countByIsAvailable(true),
                 bloodRequestRepository.count(),
                 donationOfferRepository.count(),
                 bloodRequestRepository.countByStatus(RequestStatus.OPEN),
-                donationOfferRepository.countByStatus(OfferStatus.ACCEPTED),
                 bloodRequestRepository.countByStatus(RequestStatus.FULFILLED),
-                donationOfferRepository.countByStatus(OfferStatus.DECLINED),
                 bloodRequestRepository.countByStatus(RequestStatus.CANCELLED),
-                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.NORMAL),
-                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.URGENT),
-                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.CRITICAL),
+                donationOfferRepository.countByStatus(OfferStatus.PENDING),
+                donationOfferRepository.countByStatus(OfferStatus.ACCEPTED),
+                donationOfferRepository.countByStatus(OfferStatus.COMPLETED),
                 ageCount,
                 bloodGroupCount
         );
