@@ -40,4 +40,8 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     @Query("SELECT u.age AS age, COUNT(u.age) AS count FROM User u GROUP BY u.age")
     List<AgeCount> countByAge();
+
+    long countByIsActive(Boolean isActive);
+
+    long countByIsAvailable(Boolean isAvailable);
 }
