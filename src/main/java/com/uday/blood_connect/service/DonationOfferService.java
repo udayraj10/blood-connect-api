@@ -37,7 +37,7 @@ public class DonationOfferService {
         Page<DonationOffer> offers = donationOfferRepository.findByDonor(user, pageable);
 
         if (offers.isEmpty()) {
-            throw new ResourceEmptyException("No offers are available");
+            throw new ResourceEmptyException("No offers are available.");
         }
 
         return offers.map(this::mapToDTO);
@@ -111,10 +111,10 @@ public class DonationOfferService {
 
     public DonationOffer getOfferById(Long offerId) {
         return donationOfferRepository.findById(offerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Offer not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Offer not found."));
     }
 
-    protected DonationOfferResponseDTO mapToDTO(DonationOffer offer) {
+    public DonationOfferResponseDTO mapToDTO(DonationOffer offer) {
         return new DonationOfferResponseDTO(
                 offer.getId(),
                 offer.getBloodRequest().getRequester().getFullName(),

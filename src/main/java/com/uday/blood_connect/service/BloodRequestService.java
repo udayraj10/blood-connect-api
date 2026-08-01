@@ -55,7 +55,7 @@ public class BloodRequestService {
         User user = userService.getUserByEmail(username);
 
         BloodRequest bloodRequest = bloodRequestRepository.findByIdAndRequesterId(requestId, user.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found."));
 
         return mapToDTO(bloodRequest);
     }
@@ -66,14 +66,14 @@ public class BloodRequestService {
         User user = userService.getUserByEmail(username);
 
         BloodRequest bloodRequest = bloodRequestRepository.findById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found."));
 
         bloodRequest.verifyOwner(user);
 
         Page<DonationOffer> offerPage = donationOfferRepository.findByBloodRequestId(requestId, pageable);
 
         if (offerPage.isEmpty()) {
-            throw new ResourceEmptyException("No donors found for this request");
+            throw new ResourceEmptyException("No donors found for this request.");
         }
 
         return offerPage.map(offer -> new MatchResultsDTO(
@@ -95,7 +95,7 @@ public class BloodRequestService {
         Page<BloodRequest> requests = bloodRequestRepository.findByRequester(user, pageable);
 
         if (requests.isEmpty()) {
-            throw new ResourceEmptyException("No active blood requests found");
+            throw new ResourceEmptyException("No active blood requests found.");
         }
 
         return requests.map(this::mapToDTO);
@@ -119,10 +119,10 @@ public class BloodRequestService {
 
     public BloodRequest getBloodRequestById(Long requestId) {
         return bloodRequestRepository.findById(requestId)
-                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Blood request not found."));
     }
 
-    private BloodRequestResponseDTO mapToDTO(BloodRequest bloodRequest) {
+    public BloodRequestResponseDTO mapToDTO(BloodRequest bloodRequest) {
         return new BloodRequestResponseDTO(
                 bloodRequest.getId(),
                 bloodRequest.getBloodGroup(),

@@ -148,7 +148,7 @@ public class UserService {
         Page<User> users = userRepository.searchByFullNameOrCity(cleanQuery, user.getId(), pageable);
 
         if (users.isEmpty()) {
-            throw new ResourceEmptyException("No user available");
+            throw new ResourceEmptyException("No user available.");
         }
 
         return users.map(this::mapToDTO);
@@ -162,10 +162,10 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User data not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User data not found."));
     }
 
-    private UserResponseDTO mapToDTO(User user) {
+    public UserResponseDTO mapToDTO(User user) {
         return new UserResponseDTO(
                 user.getId(),
                 user.getFullName(),
