@@ -38,13 +38,13 @@ public class AdminService {
 
         Page<User> users = userRepository.findAll(pageable);
 
-        return users.map(this::mapToDTO);
+        return users.map(userService::mapToDTO);
     }
 
     public UserResponseDTO getUserById(Long userId) {
         User user = userService.getUserById(userId);
 
-        return mapToDTO(user);
+        return userService.mapToDTO(user);
     }
 
     public void deactivateUser(Long userId) {
@@ -74,13 +74,13 @@ public class AdminService {
 
         Page<BloodRequest> bloodRequests = bloodRequestRepository.findAll(pageable);
 
-        return bloodRequests.map(this::mapToDTO);
+        return bloodRequests.map(bloodRequestService::mapToDTO);
     }
 
     public BloodRequestResponseDTO getBloodRequestById(Long requestId) {
         BloodRequest bloodRequest = bloodRequestService.getBloodRequestById(requestId);
 
-        return mapToDTO(bloodRequest);
+        return bloodRequestService.mapToDTO(bloodRequest);
     }
 
     public void cancelBloodRequest(Long requestId) {
@@ -125,41 +125,11 @@ public class AdminService {
                 bloodRequestRepository.countByStatus(RequestStatus.OPEN),
                 bloodRequestRepository.countByStatus(RequestStatus.FULFILLED),
                 bloodRequestRepository.countByStatus(RequestStatus.CANCELLED),
-                donationOfferRepository.countByStatus(OfferStatus.PENDING),
-                donationOfferRepository.countByStatus(OfferStatus.ACCEPTED),
-                donationOfferRepository.countByStatus(OfferStatus.COMPLETED),
+                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.NORMAL),
+                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.URGENT),
+                bloodRequestRepository.countByUrgencyLevel(UrgencyLevel.CRITICAL),
                 ageCount,
                 bloodGroupCount
-        );
-    }
-
-    private UserResponseDTO mapToDTO(User user) {
-        return new UserResponseDTO(
-                user.getId(),
-                user.getFullName(),
-                user.getEmail(),
-                user.getRole(),
-                user.getPhone(),
-                user.getAge(),
-                user.getBloodGroup(),
-                user.getCity(),
-                user.getAddress(),
-                user.getAccountType(),
-                user.getIsAvailable(),
-                user.getLastDonationDate(),
-                user.getCreatedAt()
-        );
-    }
-
-    private BloodRequestResponseDTO mapToDTO(BloodRequest bloodRequest) {
-        return new BloodRequestResponseDTO(
-                bloodRequest.getId(),
-                bloodRequest.getBloodGroup(),
-                bloodRequest.getCity(),
-                bloodRequest.getUrgencyLevel(),
-                bloodRequest.getStatus(),
-                bloodRequest.getMessage(),
-                bloodRequest.getCreatedAt()
         );
     }
 
