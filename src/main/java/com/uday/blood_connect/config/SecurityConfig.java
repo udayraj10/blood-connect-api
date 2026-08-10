@@ -44,7 +44,6 @@ public class SecurityConfig {
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .authorizeHttpRequests(auth -> auth
-                        // Public Swagger/OpenAPI endpoints
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/api-json/**",
@@ -52,6 +51,7 @@ public class SecurityConfig {
                                 "/docs"
                         ).permitAll()
                         .requestMatchers("/api/auth/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/ping").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
