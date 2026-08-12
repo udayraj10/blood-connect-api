@@ -1,12 +1,8 @@
 package com.uday.blood_connect.entity;
 
 import com.uday.blood_connect.enums.OfferStatus;
-import com.uday.blood_connect.enums.RequestStatus;
 import com.uday.blood_connect.exception.RequestAlreadyFulFilledException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -16,7 +12,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "donation_offers")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

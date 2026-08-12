@@ -3,10 +3,7 @@ package com.uday.blood_connect.entity;
 import com.uday.blood_connect.enums.BloodGroup;
 import com.uday.blood_connect.enums.AccountType;
 import com.uday.blood_connect.enums.Role;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -18,7 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

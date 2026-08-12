@@ -6,10 +6,7 @@ import com.uday.blood_connect.enums.UrgencyLevel;
 import com.uday.blood_connect.enums.RequestStatus;
 import com.uday.blood_connect.exception.RequestAlreadyFulFilledException;
 import com.uday.blood_connect.exception.UnauthorizedActionExcepition;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -20,7 +17,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "blood_requests")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
