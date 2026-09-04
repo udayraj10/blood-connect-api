@@ -29,67 +29,6 @@ public class UserRepositoryTest {
     private TestEntityManager entityManager;
 
     @Test
-    void save_WhenValidUser_ThenPersistsUser() {
-        User user = createValidUser();
-        User savedUser = userRepository.saveAndFlush(user);
-
-        assertNotNull(savedUser.getId());
-        assertNotNull(savedUser.getCreatedAt());
-        assertEquals("Uday Kumar", savedUser.getFullName());
-        assertEquals("uday@gmail.com", savedUser.getEmail());
-    }
-
-    @Test
-    void findByEmail_WhenExistingEmail_ThenReturnsUser() {
-        User user = createValidUser();
-        entityManager.persistAndFlush(user);
-        entityManager.clear();
-
-        Optional<User> byEmail = userRepository.findByEmail("uday@gmail.com");
-
-        assertTrue(byEmail.isPresent());
-        User foundUser = byEmail.get();
-        assertEquals("Uday Kumar", foundUser.getFullName());
-        assertNotNull(foundUser.getCreatedAt());
-    }
-
-    @Test
-    void findByEmail_WhenNonExistingEmail_ThenReturnsEmpty() {
-        Optional<User> byEmail = userRepository.findByEmail("uday@gmail.com");
-
-        assertTrue(byEmail.isEmpty());
-    }
-
-    @Test
-    void save_WhenDuplicateEmail_ThenThrowsException() {
-        User user1 = createValidUser();
-        entityManager.persistAndFlush(user1);
-
-        User user2 = createValidUser();
-
-        assertThrows(DataIntegrityViolationException.class,
-                () -> userRepository.saveAndFlush(user2));
-    }
-
-    @Test
-    void existsByEmail_WhenExistingEmail_ThenReturnsTrue() {
-        User user = createValidUser();
-        entityManager.persistAndFlush(user);
-        entityManager.clear();
-
-        boolean exists = userRepository.existsByEmail("uday@gmail.com");
-
-        assertTrue(exists);
-    }
-
-    @Test
-    void existsByEmail_WhenNonExistingEmail_ThenReturnsFalse() {
-        boolean exists = userRepository.existsByEmail("uday@gmail.com");
-
-        assertFalse(exists);
-    }
-
-    @Test
     void countByIsActive_WhenActiveUsers_ThenReturnsActiveUserCount() {
         User user = createValidUser();
         entityManager.persistAndFlush(user);

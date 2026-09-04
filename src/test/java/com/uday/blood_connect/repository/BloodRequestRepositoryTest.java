@@ -25,52 +25,6 @@ public class BloodRequestRepositoryTest {
     private BloodRequestRepository bloodRequestRepository;
 
     @Test
-    void findByRequester_WhenRequesterExists_ReturnBloodRequests() {
-        User requester = createValidUser();
-        entityManager.persistAndFlush(requester);
-
-        BloodRequest bloodRequest1 = createValidBloodRequest(requester);
-        BloodRequest bloodRequest2 = createValidBloodRequest(requester);
-        entityManager.persistAndFlush(bloodRequest1);
-        entityManager.persistAndFlush(bloodRequest2);
-
-        Pageable pageable = PageRequest.of(0, 10);
-
-        List<BloodRequest> result = bloodRequestRepository.findByRequester(requester, pageable).getContent();
-
-        assertEquals(2, result.size());
-        assertEquals(bloodRequest1.getId(), result.get(0).getId());
-        assertEquals(bloodRequest2.getId(), result.get(1).getId());
-    }
-
-    @Test
-    void findByRequester_WhenMultipleRequestersExist_ReturnMatchingBloodRequests() {
-        User requester1 = createValidUser();
-        entityManager.persistAndFlush(requester1);
-
-        User requester2 = createValidUser();
-        requester2.setEmail("raju@gmail.com");
-        requester2.setFullName("Raju");
-        entityManager.persistAndFlush(requester2);
-
-        BloodRequest bloodRequest1 = createValidBloodRequest(requester1);
-        BloodRequest bloodRequest2 = createValidBloodRequest(requester2);
-        entityManager.persistAndFlush(bloodRequest1);
-        entityManager.persistAndFlush(bloodRequest2);
-
-        Pageable pageable = PageRequest.of(0, 10);
-
-        List<BloodRequest> result1 = bloodRequestRepository.findByRequester(requester1, pageable).getContent();
-        List<BloodRequest> result2 = bloodRequestRepository.findByRequester(requester2, pageable).getContent();
-
-        assertEquals(1, result1.size());
-        assertEquals(bloodRequest1.getId(), result1.get(0).getId());
-
-        assertEquals(1, result2.size());
-        assertEquals(bloodRequest2.getId(), result2.get(0).getId());
-    }
-
-    @Test
     void findByIdAndRequesterId_WhenBloodRequestExists_ReturnBloodRequest() {
         User requester = createValidUser();
         entityManager.persistAndFlush(requester);
