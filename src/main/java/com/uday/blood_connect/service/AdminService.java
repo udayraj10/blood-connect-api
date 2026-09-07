@@ -8,7 +8,6 @@ import com.uday.blood_connect.entity.BloodRequest;
 import com.uday.blood_connect.entity.DonationOffer;
 import com.uday.blood_connect.entity.User;
 import com.uday.blood_connect.enums.BloodGroup;
-import com.uday.blood_connect.enums.OfferStatus;
 import com.uday.blood_connect.enums.RequestStatus;
 import com.uday.blood_connect.enums.UrgencyLevel;
 import com.uday.blood_connect.repository.*;
@@ -66,7 +65,7 @@ public class AdminService {
     public void deleteUser(Long userId) {
         User user = userService.getUserById(userId);
 
-        userRepository.delete(user);
+        userRepository.deleteById(user.getId());
     }
 
     public Page<BloodRequestResponseDTO> getAllBloodRequests(int page, int size) {
