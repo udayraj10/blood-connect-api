@@ -80,7 +80,9 @@ public class BloodRequest {
         ensureOpenStatus();
 
         this.setStatus(RequestStatus.CANCELLED);
-        this.donationOffers.forEach(o -> o.setStatus(OfferStatus.CANCELLED));
+        if (this.donationOffers != null) {
+            this.donationOffers.forEach(o -> o.setStatus(OfferStatus.CANCELLED));
+        }
     }
 
     public void ensureOpenStatus() {
@@ -89,27 +91,6 @@ public class BloodRequest {
                     "Only open requests can be modified."
             );
         }
-    }
-
-    public void acceptRequest(DonationOffer donationOffer) {
-        ensureOpenStatus();
-
-        if (donationOffer.getStatus() != OfferStatus.PENDING) {
-            throw new RequestAlreadyFulFilledException(
-                    "Only pending offers can be accepted."
-            );
-        }
-
-        this.donationOffers.stream()
-                .filter(offer -> offer.getStatus() == OfferStatus.ACCEPTED)
-                .findFirst()
-                .ifPresent(offer -> {
-                    throw new RequestAlreadyFulFilledException(
-                            "Blood request already accepted by another donor."
-                    );
-                });
-
-        donationOffer.accept();
     }
 
     public void fulfillRequest() {

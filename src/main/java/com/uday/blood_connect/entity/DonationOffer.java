@@ -57,6 +57,12 @@ public class DonationOffer {
     }
 
     public void accept() {
+        if (this.getStatus() != OfferStatus.PENDING) {
+            throw new RequestAlreadyFulFilledException(
+                    "Blood request already accepted by another donor."
+            );
+        }
+
         this.status = OfferStatus.ACCEPTED;
         this.respondedAt = LocalDateTime.now();
     }
