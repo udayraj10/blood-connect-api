@@ -6,6 +6,7 @@ import com.uday.blood_connect.enums.BloodGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RegisterDTO {
 
     @Schema(description = "Full name of the user", example = "Aarav Sharma")
