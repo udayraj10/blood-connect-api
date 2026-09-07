@@ -19,8 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BloodRequestService {
@@ -104,9 +102,9 @@ public class BloodRequestService {
     @Transactional
     public BloodRequestResponseDTO cancelRequest(Long requestId, String username) {
 
-        BloodRequest bloodRequest = getBloodRequestById(requestId);
-
         User user = userService.getUserByEmail(username);
+
+        BloodRequest bloodRequest = getBloodRequestById(requestId);
 
         bloodRequest.verifyOwner(user);
 
