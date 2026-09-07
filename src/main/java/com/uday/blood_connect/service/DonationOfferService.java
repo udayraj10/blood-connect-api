@@ -12,7 +12,6 @@ import com.uday.blood_connect.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,14 +51,15 @@ public class DonationOfferService {
         return mapToDTO(offer);
     }
 
-    @Transactional
     public DonationOfferResponseDTO acceptOffer(Long offerId, String username) {
 
         DonationOffer offer = getOfferById(offerId);
 
         offer.verifyDonor(userService.getUserByEmail(username));
 
-        offer.getBloodRequest().acceptRequest(offer);
+        offer.getBloodRequest().ensureOpenStatus();
+
+        offer.accept();
 
         donationOfferRepository.save(offer);
 
