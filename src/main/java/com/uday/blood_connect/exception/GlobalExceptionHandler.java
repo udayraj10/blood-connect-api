@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceEmpty(ResourceEmptyException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "'NOT_FOUND",
+                "NOT_FOUND",
                 ex.getMessage()
         );
         return ResponseEntity.status(404).body(errorResponse);
@@ -120,8 +120,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(403).body(errorResponse);
     }
 
-    @ExceptionHandler(UnauthorizedActionExcepition.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedAction(UnauthorizedActionExcepition ex) {
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAction(UnauthorizedActionException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 "UNAUTHORIZED",

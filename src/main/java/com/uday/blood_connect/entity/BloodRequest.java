@@ -5,7 +5,7 @@ import com.uday.blood_connect.enums.OfferStatus;
 import com.uday.blood_connect.enums.UrgencyLevel;
 import com.uday.blood_connect.enums.RequestStatus;
 import com.uday.blood_connect.exception.RequestAlreadyFulFilledException;
-import com.uday.blood_connect.exception.UnauthorizedActionExcepition;
+import com.uday.blood_connect.exception.UnauthorizedActionException;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -71,7 +71,7 @@ public class BloodRequest {
 
     public void verifyOwner(User user) {
         if (!this.getRequester().getId().equals(user.getId())) {
-            throw new UnauthorizedActionExcepition(
+            throw new UnauthorizedActionException(
                     "You are not authorized to perform this action");
         }
     }
