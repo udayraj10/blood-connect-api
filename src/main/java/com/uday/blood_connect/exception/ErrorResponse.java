@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 
 public record ErrorResponse(
 
-        String status,
-        String code,
-        Object message,
-        LocalDateTime timestamp
+        LocalDateTime timestamp,
+        int statusCode,
+        String error,
+        String message
 ) {
-    public ErrorResponse(String code, Object message) {
-        this("error", code, message, LocalDateTime.now());
+
+    // overloaded constructor
+    public ErrorResponse(int statusCode, String error, String message) {
+        this(LocalDateTime.now(), statusCode, error, message);
     }
 }
