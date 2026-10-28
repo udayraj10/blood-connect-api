@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,7 +25,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "NOT_FOUND",
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.status(404).body(errorResponse);
@@ -34,7 +36,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleResourceEmpty(ResourceEmptyException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "NOT_FOUND",
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.status(404).body(errorResponse);
@@ -44,7 +47,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUserAlreadyExists(UserAlreadyExistsException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "CONFLICT",
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.status(409).body(errorResponse);
@@ -54,7 +58,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleExpired(ExpiredJwtException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "EXPIRED_TOKEN",
+                401,
+                "Expired Token",
                 "Session expired. Please log in again."
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -64,7 +69,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidToken(JwtException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "INVALID_TOKEN",
+                401,
+                "Invalid Token",
                 "Invalid or corrupted token."
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -74,7 +80,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnsupported(UnsupportedJwtException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "UNSUPPORTED_TOKEN",
+                401,
+                "Unsupported Token",
                 "Unsupported token format."
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -84,7 +91,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "BAD_CREDENTIALS",
+                401,
+                "Bad Credentials",
                 ex.getMessage()
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -94,7 +102,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInsufficientAuthentication(InsufficientAuthenticationException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "AUTHENTICATION_REQUIRED",
+                401,
+                "Authentication Required",
                 "Authentication is required to access this resource."
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -104,7 +113,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "UNAUTHORIZED",
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -114,7 +124,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "FORBIDDEN",
+                HttpStatus.FORBIDDEN.value(),
+                HttpStatus.FORBIDDEN.getReasonPhrase(),
                 "You do not have permission to access this resource."
         );
         return ResponseEntity.status(403).body(errorResponse);
@@ -124,7 +135,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleUnauthorizedAction(UnauthorizedActionException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "UNAUTHORIZED",
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.status(401).body(errorResponse);
@@ -134,17 +146,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRoleNotFound(RoleNotFoundException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "ROLE_NOT_FOUND",
+                404,
+                "Role Not Found",
                 ex.getMessage()
         );
-        return ResponseEntity.status(500).body(errorResponse);
+        return ResponseEntity.status(404).body(errorResponse);
     }
 
     @ExceptionHandler(RequestAlreadyFulFilledException.class)
     public ResponseEntity<ErrorResponse> handleRequestAlreadyFulFilled(RequestAlreadyFulFilledException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "BAD_REQUEST",
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.badRequest().body(errorResponse);
@@ -154,21 +168,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidEnum(InvalidEnumException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "BAD_REQUEST",
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ValidationErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
 
         Map<String, String> fieldErrors = new HashMap<>();
         ex.getBindingResult().getFieldErrors()
                 .forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                "VALIDATION_FAILED",
+        ValidationErrorResponse errorResponse = new ValidationErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                "Validation failed",
                 fieldErrors
         );
         return ResponseEntity.badRequest().body(errorResponse);
@@ -178,7 +195,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse(
-                "BAD_REQUEST",
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 ex.getMessage()
         );
         return ResponseEntity.badRequest().body(errorResponse);
